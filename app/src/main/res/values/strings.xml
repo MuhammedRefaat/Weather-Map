@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Xebia Weather Map</string>
+    <string name="logo_placement">Logo Placement</string>
+    <string name="your_city">Your City</string>
+    <string name="other_cities">Other Cities</string>
+    <string name="back_button">Back Button</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Add cities comma separated</string>
+    <string name="cities_less">You should add at least 3 cities</string>
+    <string name="cities_more">You can have max of 7 cities</string>
+    <string name="temperature">Temperature</string>
+    <string name="weather_desc">Weather Desc.</string>
+    <string name="wind_speed">Wind Speed</string>
+</resources>
