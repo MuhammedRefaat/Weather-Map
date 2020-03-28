@@ -7,16 +7,18 @@ import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import com.dinuscxj.progressbar.CircleProgressBar
 import com.imagine.weathermap.R
+import com.imagine.weathermap.models.ServerResEvent
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import java.lang.Exception
 
 class OtherCitiesWeather : AppCompatActivity() {
 
@@ -35,6 +37,13 @@ class OtherCitiesWeather : AppCompatActivity() {
         circleProgress = findViewById(R.id.circular_progress)
         // add text watcher for the Search TextField
         searchField.addTextChangedListener(searchTextWatcher)
+        // Subscribe to EventBus events
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
     /**
@@ -94,9 +103,31 @@ class OtherCitiesWeather : AppCompatActivity() {
             return
         }else{
             // Start Searching
-
+            // show progress
+            circleProgress.visibility = View.VISIBLE
+            // call the server
+            // TODO
         }
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun serverResponseReceived(serverResEvent: ServerResEvent) {
+        try {
+            circleProgress.visibility = View.GONE
+            if (serverResEvent.success) {
+                // TODO
+                serverResEvent.responseData
+            } else {
+                Toast.makeText(
+                    this,
+                    resources.getText(R.string.something_went_wrong),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
     }
 
 }

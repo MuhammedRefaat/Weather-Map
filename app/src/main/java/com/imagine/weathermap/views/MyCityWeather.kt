@@ -45,6 +45,11 @@ class MyCityWeather : AppCompatActivity() {
         forecastMyCityWeather()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
     private fun forecastMyCityWeather() {
         if (Utils.locationPermissionsGranted(this)) {
             getCurrentLocation()
