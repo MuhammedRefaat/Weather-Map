@@ -8,6 +8,9 @@ import com.google.gson.annotations.SerializedName
 
 class APIsData {
 
+    @SerializedName("message")
+    val message: String? = null
+
     @SerializedName("list")
     val weatherConditions: List<WeatherCondition>? = null
 

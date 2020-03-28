@@ -1,3 +1,9 @@
 package com.imagine.weathermap.models
 
-class ServerResEvent(var success: Boolean, var responseData: APIsData?)
+import okhttp3.ResponseBody
+
+class ServerResEvent(
+    var success: Boolean,
+    var responseData: APIsData?,
+    var errorBody: ResponseBody?
+)

@@ -13,18 +13,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import com.imagine.weathermap.R
+import com.imagine.weathermap.controllers.APIsController
 import com.imagine.weathermap.models.ServerResEvent
+import com.imagine.weathermap.views.customViews.WeatherDetails
+import okhttp3.ResponseBody
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.lang.Exception
+import android.widget.Toast
+import com.imagine.weathermap.controllers.Utils
+import org.json.JSONObject
+
 
 class OtherCitiesWeather : AppCompatActivity() {
 
     lateinit var searchIcon: ImageView
     lateinit var searchField: EditText
     lateinit var errorText: TextView
-    lateinit var circleProgress : ProgressBar
+    lateinit var circleProgress: ProgressBar
+    lateinit var containerLayout: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +42,7 @@ class OtherCitiesWeather : AppCompatActivity() {
         searchField = findViewById(R.id.search_field)
         errorText = findViewById(R.id.error_text)
         circleProgress = findViewById(R.id.circular_progress)
+        containerLayout = findViewById(R.id.cities_weather)
         // add text watcher for the Search TextField
         searchField.addTextChangedListener(searchTextWatcher)
         // Subscribe to EventBus events
@@ -65,10 +74,10 @@ class OtherCitiesWeather : AppCompatActivity() {
                     this@OtherCitiesWeather,
                     R.color.colorPrimary
                 )
-                if(searchField.text.split(",").size > 7) {
+                if (searchField.text.split(",").size > 7) {
                     errorText.text = getString(R.string.cities_more)
                     errorText.visibility = View.VISIBLE
-                }else{
+                } else {
                     errorText.visibility = View.INVISIBLE
                 }
             }
@@ -95,17 +104,20 @@ class OtherCitiesWeather : AppCompatActivity() {
         val cities = searchField.text.split(",")
         if (cities.size < 3 || cities.size > 7) { // No Search for you
             errorText.visibility = View.VISIBLE
-            if(cities.size < 3)
+            if (cities.size < 3)
                 errorText.text = getString(R.string.cities_less)
             else
                 errorText.text = getString(R.string.cities_more)
             return
-        }else{
+        } else {
             // Start Searching
             // show progress
             circleProgress.visibility = View.VISIBLE
-            // call the server
-            // TODO
+            // clear previous Data (if any)
+            containerLayout.removeAllViews()
+            // call the Server API
+            APIsController.getInstance(this@OtherCitiesWeather)
+                .getCitiesWeatherCondition(searchField.text.toString())
         }
 
     }
@@ -115,18 +127,23 @@ class OtherCitiesWeather : AppCompatActivity() {
         try {
             circleProgress.visibility = View.GONE
             if (serverResEvent.success) {
-                // TODO
-                serverResEvent.responseData
+                // get the Data and display it
+                val weatherConditions = serverResEvent.responseData?.weatherConditions
+                WeatherDetails(this@OtherCitiesWeather).buildOtherCitiesForecastLayout(
+                    weatherConditions!!,
+                    containerLayout
+                )
             } else {
-                Toast.makeText(
-                    this,
-                    resources.getText(R.string.something_went_wrong),
-                    Toast.LENGTH_LONG
-                ).show()
+                goForError(serverResEvent.errorBody)
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
+            goForError(serverResEvent.errorBody)
         }
+    }
+
+    private fun goForError(errorBody: ResponseBody?) {
+        Utils.displayError(this@OtherCitiesWeather, errorBody)
     }
 
 }

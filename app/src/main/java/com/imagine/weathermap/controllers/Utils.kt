@@ -5,7 +5,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.imagine.weathermap.R
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import java.lang.Exception
 
 
 class Utils {
@@ -46,6 +51,30 @@ class Utils {
             return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
                 LocationManager.NETWORK_PROVIDER
             )
+        }
+
+        fun displayError(context: Context, errorBody: ResponseBody?) {
+            if (errorBody != null) {
+                try {
+                    val jObjError = JSONObject(errorBody.string())
+                    Toast.makeText(
+                        context, jObjError.getString("message"),
+                        Toast.LENGTH_LONG
+                    ).show()
+                } catch (e: Exception) {
+                    Toast.makeText(
+                        context,
+                        context.resources.getText(com.imagine.weathermap.R.string.something_went_wrong),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+            } else {
+                Toast.makeText(
+                    context, context.resources.getText(R.string.something_went_wrong),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
 }

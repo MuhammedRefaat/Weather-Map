@@ -23,21 +23,24 @@ class APIsCaller {
                     override fun onResponse(call: Call<APIsData>, response: Response<APIsData>) {
                         if (response.isSuccessful) {
                             try {
-                                EventBus.getDefault().post(ServerResEvent(true, response.body()))
+                                EventBus.getDefault().post(
+                                    ServerResEvent(true, response.body(), null)
+                                )
                             } catch (ex: Exception) {
-                                EventBus.getDefault().post(ServerResEvent(false, null))
+                                EventBus.getDefault().post(ServerResEvent(false, null, null))
                             }
                         } else {
-                            EventBus.getDefault().post(ServerResEvent(false, null))
+                            EventBus.getDefault()
+                                .post(ServerResEvent(false, null, response.errorBody()))
                         }
                     }
 
                     override fun onFailure(call: Call<APIsData>, t: Throwable) {
-                        EventBus.getDefault().post(ServerResEvent(false, null))
+                        EventBus.getDefault().post(ServerResEvent(false, null, null))
                     }
                 })
             } else {
-                EventBus.getDefault().post(ServerResEvent(false, null))
+                EventBus.getDefault().post(ServerResEvent(false, null, null))
             }
         }
 
@@ -49,21 +52,28 @@ class APIsCaller {
                     override fun onResponse(call: Call<APIsData>, response: Response<APIsData>) {
                         if (response.isSuccessful) {
                             try {
-                                EventBus.getDefault().post(ServerResEvent(true, response.body()))
+                                EventBus.getDefault().post(
+                                    ServerResEvent(
+                                        true,
+                                        response.body(),
+                                        null
+                                    )
+                                )
                             } catch (ex: Exception) {
-                                EventBus.getDefault().post(ServerResEvent(false, null))
+                                EventBus.getDefault().post(ServerResEvent(false, null, null))
                             }
                         } else {
-                            EventBus.getDefault().post(ServerResEvent(false, null))
+                            EventBus.getDefault()
+                                .post(ServerResEvent(false, null, response.errorBody()))
                         }
                     }
 
                     override fun onFailure(call: Call<APIsData>, t: Throwable) {
-                        EventBus.getDefault().post(ServerResEvent(false, null))
+                        EventBus.getDefault().post(ServerResEvent(false, null, null))
                     }
                 })
             } else {
-                EventBus.getDefault().post(ServerResEvent(false, null))
+                EventBus.getDefault().post(ServerResEvent(false, null, null))
             }
         }
 

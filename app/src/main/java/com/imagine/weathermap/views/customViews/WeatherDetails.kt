@@ -37,7 +37,31 @@ class WeatherDetails : LinearLayout {
     }
 
     @SuppressLint("SetTextI18n")
-    fun buildLayout(
+    fun buildMyCityForecastLayout(
+        weatherConditions: List<APIsData.WeatherCondition>,
+        containerLayout: LinearLayout
+    ): LinearLayout {
+        for (weatherCondition in weatherConditions) {
+            val view = LayoutInflater.from(context)
+                .inflate(R.layout.single_city_weather, this, false)
+            try {
+                view.city_name.text = weatherCondition.dtText
+                view.temperature_min.text = "Min. " + weatherCondition.main!!.tempMin
+                view.temperature_max.text = "Max. " + weatherCondition.main.tempMax
+                view.Weather_desc.text = weatherCondition.weather!![0].description!!
+                view.wind_speed.text = weatherCondition.wind!!.speed
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                view.weather_details.visibility = View.GONE
+                view.na.visibility = View.VISIBLE
+            }
+            containerLayout.addView(view)
+        }
+        return containerLayout
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun buildOtherCitiesForecastLayout(
         weatherConditions: List<APIsData.WeatherCondition>,
         containerLayout: LinearLayout
     ): LinearLayout {
