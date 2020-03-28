@@ -6,17 +6,19 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/city_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:gravity="center"
         android:padding="10dp"
-        android:text="Valencia"
+        android:text="@string/na"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorAccent"
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/na"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/gray"
@@ -25,131 +27,140 @@
         android:text="N/A"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/colorAccent"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <LinearLayout
+        android:id="@+id/weather_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="5dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.35"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="@string/temperature"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/gray" />
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="0.65"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="5dp">
 
             <TextView
-                android:id="@+id/temperature_min"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.35"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Min. 55C"
+                android:text="@string/temperature"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/gray" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.65"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/temperature_min"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="@string/na"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/temperature_max"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="@string/na"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/colorPrimary" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:alpha="0.5"
+            android:background="@color/gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="5dp">
 
             <TextView
-                android:id="@+id/temperature_max"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.35"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Max. 44C"
+                android:text="@string/weather_desc"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/gray" />
+
+            <TextView
+                android:id="@+id/Weather_desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.65"
+                android:gravity="center"
+                android:text="@string/na"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorPrimary" />
 
         </LinearLayout>
 
-    </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:alpha="0.5"
+            android:background="@color/gray" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:alpha="0.5"
-        android:background="@color/gray" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="5dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.35"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="@string/weather_desc"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/gray" />
-
-        <TextView
-            android:id="@+id/Weather_desc"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="0.65"
-            android:gravity="center"
-            android:text="the big brown fox jumps over the lazy dog, the big brown fox jumps over the lazy dog"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/colorPrimary" />
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="5dp">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.35"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/wind_speed"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/gray" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:alpha="0.5"
-        android:background="@color/gray" />
+            <TextView
+                android:id="@+id/wind_speed"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.65"
+                android:gravity="center"
+                android:text="@string/na"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorPrimary" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="5dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.35"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="@string/wind_speed"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/gray" />
-
-        <TextView
-            android:id="@+id/wind_speed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="0.65"
-            android:gravity="center"
-            android:text="55 km/h"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/colorPrimary" />
+        </LinearLayout>
 
     </LinearLayout>
 

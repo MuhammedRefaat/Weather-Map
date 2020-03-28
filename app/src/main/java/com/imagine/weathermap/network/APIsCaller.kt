@@ -2,6 +2,7 @@ package com.imagine.weathermap.network
 
 import com.imagine.weathermap.controllers.APIsController
 import com.imagine.weathermap.misc.AppConstants
+import com.imagine.weathermap.models.APIsData
 import com.imagine.weathermap.models.ServerResEvent
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Call

@@ -1,4 +1,4 @@
-package com.imagine.weathermap.views
+package com.imagine.weathermap.views.activities
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -12,7 +12,6 @@ import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
-import com.dinuscxj.progressbar.CircleProgressBar
 import com.imagine.weathermap.R
 import com.imagine.weathermap.models.ServerResEvent
 import org.greenrobot.eventbus.EventBus

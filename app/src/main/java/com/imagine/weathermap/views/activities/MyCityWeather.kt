@@ -1,4 +1,4 @@
-package com.imagine.weathermap.views
+package com.imagine.weathermap.views.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -8,18 +8,17 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.*
 import com.imagine.weathermap.controllers.Utils
 import android.location.Geocoder
 import android.os.Handler
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import java.util.*
 import com.imagine.weathermap.R
+import com.imagine.weathermap.controllers.APIsController
 import com.imagine.weathermap.models.ServerResEvent
+import com.imagine.weathermap.views.customViews.WeatherDetails
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -31,7 +30,11 @@ class MyCityWeather : AppCompatActivity() {
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
     lateinit var cityName: TextView
-    lateinit var circleProgress: ProgressBar
+    private lateinit var circleProgress: ProgressBar
+    lateinit var containerLayout: LinearLayout
+
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +42,7 @@ class MyCityWeather : AppCompatActivity() {
         // declare views
         cityName = findViewById(R.id.city_name)
         circleProgress = findViewById(R.id.circular_progress)
+        containerLayout = findViewById(R.id.cities_weather)
         // Subscribe to EventBus events
         EventBus.getDefault().register(this)
         // Get My City Weather Details
@@ -94,13 +98,10 @@ class MyCityWeather : AppCompatActivity() {
 
     private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
-            getCityName(
-                locationResult.lastLocation.latitude,
-                locationResult.lastLocation.longitude
-            )
-            // TODO
-            // lat = location.latitude
-            // lon = location.longitude
+            latitude = locationResult.lastLocation.latitude;
+            longitude = locationResult.lastLocation.latitude;
+            APIsController.getInstance(this@MyCityWeather)
+                .getMyCityWeatherForecast(latitude.toString(), longitude.toString())
         }
     }
 
@@ -114,10 +115,13 @@ class MyCityWeather : AppCompatActivity() {
                 if (location == null) {
                     requestNewLocationData()
                 } else {
-                    getCityName(location.latitude, location.longitude)
-                    // TODO
-                    // lat = location.latitude
-                    // lon = location.longitude
+                    latitude = location.latitude
+                    longitude = location.longitude
+                    APIsController.getInstance(this@MyCityWeather)
+                        .getMyCityWeatherForecast(
+                            latitude.toString(),
+                            longitude.toString()
+                        )
                 }
             }
         } else {
@@ -149,6 +153,8 @@ class MyCityWeather : AppCompatActivity() {
             view.alpha = 1.0f
         }, 150)
         // do the work
+        cityName.text = ""
+        containerLayout.removeAllViews()
         forecastMyCityWeather()
     }
 
@@ -157,17 +163,30 @@ class MyCityWeather : AppCompatActivity() {
         try {
             circleProgress.visibility = View.GONE
             if (serverResEvent.success) {
-                // TODO
-                serverResEvent.responseData
+                // get the Data and display it
+                cityName.text = serverResEvent.responseData?.city?.name
+                val weatherConditions = serverResEvent.responseData?.weatherConditions
+                WeatherDetails(this@MyCityWeather).buildLayout(
+                    weatherConditions!!,
+                    containerLayout
+                )
             } else {
-                Toast.makeText(
-                    this,
-                    resources.getText(R.string.something_went_wrong),
-                    Toast.LENGTH_LONG
-                ).show()
+                goForError()
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
+            goForError()
+        }
+    }
+
+    private fun goForError() {
+        Toast.makeText(
+            this,
+            resources.getText(R.string.something_went_wrong),
+            Toast.LENGTH_LONG
+        ).show()
+        if (latitude != 0.0 && longitude != 0.0) {
+            getCityName(latitude, longitude)
         }
     }
 }

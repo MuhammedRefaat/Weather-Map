@@ -1,6 +1,7 @@
 package com.imagine.weathermap.network
 
 import com.imagine.weathermap.misc.AppConstants
+import com.imagine.weathermap.models.APIsData
 import retrofit2.Call
 import retrofit2.http.POST
 import retrofit2.http.Query

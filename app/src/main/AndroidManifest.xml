@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.imagine.weathermap">
 
+    <!--For Network Calls-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <!--For Getting Location-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -15,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".views.MainActivity">
+        <activity android:name=".views.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,9 +26,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".views.MyCityWeather" />
+        <activity android:name=".views.activities.MyCityWeather" />
 
-        <activity android:name=".views.OtherCitiesWeather" />
+        <activity android:name=".views.activities.OtherCitiesWeather" />
     </application>
 
 </manifest>
