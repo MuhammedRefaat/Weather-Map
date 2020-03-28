@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.imagine.weathermap.R
+import com.imagine.weathermap.controllers.Utils
 
 class MainActivity : AppCompatActivity() {
 

@@ -11,4 +11,7 @@
     <string name="temperature">Temperature</string>
     <string name="weather_desc">Weather Desc.</string>
     <string name="wind_speed">Wind Speed</string>
+    <string name="give_location_permissions">Please allow app location access from device settings</string>
+    <string name="location_closed">Location is closed! kindly turn it ON</string>
+    <string name="something_went_wrong">Something went wrong, please try again!</string>
 </resources>

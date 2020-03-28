@@ -9,11 +9,13 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
+import com.dinuscxj.progressbar.CircleProgressBar
 import com.imagine.weathermap.R
 
 class OtherCitiesWeather : AppCompatActivity() {
@@ -21,6 +23,7 @@ class OtherCitiesWeather : AppCompatActivity() {
     lateinit var searchIcon: ImageView
     lateinit var searchField: EditText
     lateinit var errorText: TextView
+    lateinit var circleProgress : ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +32,7 @@ class OtherCitiesWeather : AppCompatActivity() {
         searchIcon = findViewById(R.id.search_icon)
         searchField = findViewById(R.id.search_field)
         errorText = findViewById(R.id.error_text)
+        circleProgress = findViewById(R.id.circular_progress)
         // add text watcher for the Search TextField
         searchField.addTextChangedListener(searchTextWatcher)
     }
@@ -81,7 +85,7 @@ class OtherCitiesWeather : AppCompatActivity() {
         }, 150)
         // do the work
         val cities = searchField.text.split(",")
-        if (cities.size < 3 || cities.size > 7) {
+        if (cities.size < 3 || cities.size > 7) { // No Search for you
             errorText.visibility = View.VISIBLE
             if(cities.size < 3)
                 errorText.text = getString(R.string.cities_less)
@@ -89,7 +93,8 @@ class OtherCitiesWeather : AppCompatActivity() {
                 errorText.text = getString(R.string.cities_more)
             return
         }else{
-            // TODO
+            // Start Searching
+
         }
 
     }
