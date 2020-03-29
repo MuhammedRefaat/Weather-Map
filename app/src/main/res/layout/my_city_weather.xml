@@ -65,6 +65,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginEnd="20dp"
+                android:hint="@string/locating_you"
                 android:layout_marginRight="20dp"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -72,6 +73,17 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/empty_screen_decoration"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:contentDescription="@string/empty_screen"
+            android:padding="50dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_empty_weather" />
 
         <include
             android:id="@+id/weather_forecast"

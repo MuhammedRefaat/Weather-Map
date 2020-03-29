@@ -7,7 +7,7 @@ import com.google.gson.Gson
 
 class DataValidatorUnitTest {
 
-    val sampleMyCityServerResponse: String = "{\n" +
+    private val sampleMyCityServerResponse: String = "{\n" +
             "    \"cod\": \"200\",\n" +
             "    \"message\": 0,\n" +
             "    \"cnt\": 40,\n" +
@@ -64,7 +64,7 @@ class DataValidatorUnitTest {
             "    }\n" +
             "}"
 
-    val sampleOtherCityServerResponse: String = "{\n" +
+    private val sampleOtherCityServerResponse: String = "{\n" +
             "    \"coord\": {\n" +
             "        \"lon\": 31.24,\n" +
             "        \"lat\": 30.05\n" +

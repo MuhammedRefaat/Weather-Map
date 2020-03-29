@@ -17,7 +17,6 @@ import android.widget.*
 import java.util.*
 import com.imagine.weathermap.R
 import com.imagine.weathermap.controllers.APIsController
-import com.imagine.weathermap.models.APIsData
 import com.imagine.weathermap.models.ServerResEvent
 import com.imagine.weathermap.views.customViews.WeatherDetails
 import okhttp3.ResponseBody
@@ -34,6 +33,7 @@ class MyCityWeather : AppCompatActivity() {
     lateinit var cityName: TextView
     private lateinit var circleProgress: ProgressBar
     lateinit var containerLayout: LinearLayout
+    lateinit var emptyScreen : ImageView
 
     var latitude: Double = 0.0
     var longitude: Double = 0.0
@@ -45,6 +45,7 @@ class MyCityWeather : AppCompatActivity() {
         cityName = findViewById(R.id.city_name)
         circleProgress = findViewById(R.id.circular_progress)
         containerLayout = findViewById(R.id.cities_weather)
+        emptyScreen = findViewById(R.id.empty_screen_decoration)
         // Subscribe to EventBus events
         EventBus.getDefault().register(this)
         // Get My City Weather Details
@@ -61,6 +62,7 @@ class MyCityWeather : AppCompatActivity() {
             getCurrentLocation()
         } else {
             circleProgress.visibility = View.GONE
+            emptyScreen.visibility = View.VISIBLE
             Utils.requestPermissions(this)
         }
     }
@@ -74,6 +76,7 @@ class MyCityWeather : AppCompatActivity() {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 getCurrentLocation()
             } else {
+                emptyScreen.visibility = View.VISIBLE
                 Toast.makeText(
                     this,
                     resources.getText(R.string.give_location_permissions),
@@ -111,6 +114,7 @@ class MyCityWeather : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     private fun getCurrentLocation() {
         circleProgress.visibility = View.VISIBLE
+        emptyScreen.visibility = View.GONE
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         if (Utils.isLocationEnabled(this)) {
             mFusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
@@ -182,6 +186,7 @@ class MyCityWeather : AppCompatActivity() {
 
     private fun goForError(errorBody: ResponseBody?) {
         Utils.displayError(this@MyCityWeather, errorBody)
+        emptyScreen.visibility = View.VISIBLE
         if (latitude != 0.0 && longitude != 0.0) {
             getCityName(latitude, longitude)
         }

@@ -22,7 +22,6 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.lang.Exception
 import com.imagine.weathermap.controllers.Utils
-import kotlinx.android.synthetic.main.my_city_weather.*
 
 
 class OtherCitiesWeather : AppCompatActivity() {
@@ -32,6 +31,7 @@ class OtherCitiesWeather : AppCompatActivity() {
     lateinit var errorText: TextView
     lateinit var circleProgress: ProgressBar
     lateinit var containerLayout: LinearLayout
+    lateinit var emptyScreen: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +42,7 @@ class OtherCitiesWeather : AppCompatActivity() {
         errorText = findViewById(R.id.error_text)
         circleProgress = findViewById(R.id.circular_progress)
         containerLayout = findViewById(R.id.cities_weather)
+        emptyScreen = findViewById(R.id.empty_screen_decoration)
         // add text watcher for the Search TextField
         searchField.addTextChangedListener(searchTextWatcher)
         // Subscribe to EventBus events
@@ -110,6 +111,8 @@ class OtherCitiesWeather : AppCompatActivity() {
             return
         } else {
             // Start Searching
+            // hide empty screen
+            emptyScreen.visibility = View.GONE
             // show progress
             circleProgress.visibility = View.VISIBLE
             // clear previous Data (if any)

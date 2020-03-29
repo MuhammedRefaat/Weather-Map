@@ -87,6 +87,16 @@
             android:textAllCaps="false"
             android:textColor="@color/colorAccent" />
 
+        <ImageView
+            android:id="@+id/empty_screen_decoration"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:contentDescription="@string/empty_screen"
+            android:padding="50dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_empty_weather" />
+
         <include
             layout="@layout/weather_forecast"
             android:layout_width="match_parent"

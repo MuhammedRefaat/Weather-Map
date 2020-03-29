@@ -15,12 +15,11 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Created by Muhammed Refaat on 28/3/2020.
  */
 
-internal object APIsclient {
+internal object APIsClient {
 
     var adapter: APIsInterface? = null
     private const val CONNECT_TIMEOUT = 10 // in secs
     private const val READ_WRITE_TIMEOUT = 100 // in secs
-    private const val URL = "https://svapi.io/api/"
 
     private var retrofit: Retrofit? = null
 

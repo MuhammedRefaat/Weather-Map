@@ -15,4 +15,6 @@
     <string name="location_closed">Location is closed! kindly turn it ON</string>
     <string name="something_went_wrong">Something went wrong, please try again!</string>
     <string name="na">N/A</string>
+    <string name="empty_screen">Empty Screen</string>
+    <string name="locating_you">locating you...</string>
 </resources>

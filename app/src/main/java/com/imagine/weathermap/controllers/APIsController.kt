@@ -1,10 +1,9 @@
 package com.imagine.weathermap.controllers
 
 import android.content.Context
-import com.dinuscxj.progressbar.CircleProgressBar
 import com.imagine.weathermap.network.APIsCaller
 import com.imagine.weathermap.network.APIsInterface
-import com.imagine.weathermap.network.APIsclient
+import com.imagine.weathermap.network.APIsClient
 
 class APIsController {
 
@@ -14,10 +13,8 @@ class APIsController {
 
         private var st: APIsController? = null
 
-        var progressIndicator: CircleProgressBar? = null
-
-        fun initAPIsController() {
-            adapter = APIsclient.adapter!!
+        private fun initAPIsController() {
+            adapter = APIsClient.adapter!!
         }
 
         fun getInstance(appContext: Context): APIsController {
@@ -25,7 +22,7 @@ class APIsController {
             if (st == null) {
                 st = APIsController()
                 initAPIsController()
-                adapter = APIsclient.adapter
+                adapter = APIsClient.adapter
             }
             return st as APIsController
         }

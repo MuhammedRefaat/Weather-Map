@@ -13,6 +13,9 @@ class APIsCaller {
 
     companion object {
 
+        /**
+         * Getting city weather condition by city name
+         */
         fun getCitiesWeatherCondition(cityName: String) {
             val apiCaller = APIsController.adapter?.otherCitiesWeatherInfo(
                 cityName,
@@ -45,6 +48,9 @@ class APIsCaller {
             }
         }
 
+        /**
+         * Getting current city weather forecast by city location
+         */
         fun getMyCityWeatherForecast(lat: String, lon: String) {
             val apiCaller =
                 APIsController.adapter?.myCityWeatherForecast(lat, lon, AppConstants.APP_KEY)
