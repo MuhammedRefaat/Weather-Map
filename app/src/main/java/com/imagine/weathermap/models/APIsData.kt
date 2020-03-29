@@ -8,8 +8,7 @@ import com.google.gson.annotations.SerializedName
 
 class APIsData {
 
-    @SerializedName("message")
-    val message: String? = null
+    // For My City Data (using lat,lon)
 
     @SerializedName("list")
     val weatherConditions: List<WeatherCondition>? = null
@@ -69,11 +68,29 @@ class APIsData {
 
     }
 
-
     inner class City {
 
         @SerializedName("name")
         val name: String? = ""
 
     }
+
+    // For Other City Data (using City Name)
+
+    @SerializedName("main")
+    val main: WeatherCondition.Main? = null
+
+    @SerializedName("weather")
+    val weather: List<WeatherCondition.Weather>? = null
+
+    @SerializedName("wind")
+    val wind: WeatherCondition.Wind? = null
+
+    @SerializedName("dt_txt")
+    val dtText: String? = null
+
+    @SerializedName("name")
+    val name: String? = ""
+
+
 }

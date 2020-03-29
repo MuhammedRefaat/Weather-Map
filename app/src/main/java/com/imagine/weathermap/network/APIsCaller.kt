@@ -13,9 +13,9 @@ class APIsCaller {
 
     companion object {
 
-        fun getCitiesWeatherCondition(citiesCommaSeparated: String) {
+        fun getCitiesWeatherCondition(cityName: String) {
             val apiCaller = APIsController.adapter?.otherCitiesWeatherInfo(
-                citiesCommaSeparated,
+                cityName,
                 AppConstants.APP_KEY
             )
             if (apiCaller != null) {
@@ -24,23 +24,24 @@ class APIsCaller {
                         if (response.isSuccessful) {
                             try {
                                 EventBus.getDefault().post(
-                                    ServerResEvent(true, response.body(), null)
+                                    ServerResEvent(true, response.body(), null, cityName)
                                 )
                             } catch (ex: Exception) {
-                                EventBus.getDefault().post(ServerResEvent(false, null, null))
+                                EventBus.getDefault()
+                                    .post(ServerResEvent(false, null, null, cityName))
                             }
                         } else {
                             EventBus.getDefault()
-                                .post(ServerResEvent(false, null, response.errorBody()))
+                                .post(ServerResEvent(false, null, response.errorBody(), cityName))
                         }
                     }
 
                     override fun onFailure(call: Call<APIsData>, t: Throwable) {
-                        EventBus.getDefault().post(ServerResEvent(false, null, null))
+                        EventBus.getDefault().post(ServerResEvent(false, null, null, cityName))
                     }
                 })
             } else {
-                EventBus.getDefault().post(ServerResEvent(false, null, null))
+                EventBus.getDefault().post(ServerResEvent(false, null, null, cityName))
             }
         }
 
@@ -54,26 +55,32 @@ class APIsCaller {
                             try {
                                 EventBus.getDefault().post(
                                     ServerResEvent(
-                                        true,
-                                        response.body(),
-                                        null
+                                        true, response.body(),
+                                        null, ""
                                     )
                                 )
                             } catch (ex: Exception) {
-                                EventBus.getDefault().post(ServerResEvent(false, null, null))
+                                EventBus.getDefault().post(
+                                    ServerResEvent(
+                                        false,
+                                        null,
+                                        null,
+                                        ""
+                                    )
+                                )
                             }
                         } else {
                             EventBus.getDefault()
-                                .post(ServerResEvent(false, null, response.errorBody()))
+                                .post(ServerResEvent(false, null, response.errorBody(), ""))
                         }
                     }
 
                     override fun onFailure(call: Call<APIsData>, t: Throwable) {
-                        EventBus.getDefault().post(ServerResEvent(false, null, null))
+                        EventBus.getDefault().post(ServerResEvent(false, null, null, ""))
                     }
                 })
             } else {
-                EventBus.getDefault().post(ServerResEvent(false, null, null))
+                EventBus.getDefault().post(ServerResEvent(false, null, null, ""))
             }
         }
 

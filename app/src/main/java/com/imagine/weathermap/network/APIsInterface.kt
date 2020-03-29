@@ -21,7 +21,7 @@ interface APIsInterface {
 
     @POST(AppConstants.OTHER_CITIES_API_URL_EXT)
     fun otherCitiesWeatherInfo(
-        @Query("q") citiesCommaSeparated: String,
+        @Query("q") cityName: String,
         @Query("appid") appId: String
     ): Call<APIsData>
 

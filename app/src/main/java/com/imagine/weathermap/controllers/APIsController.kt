@@ -32,8 +32,8 @@ class APIsController {
 
     }
 
-    fun getCitiesWeatherCondition(citiesCommaSeparated: String) {
-        APIsCaller.getCitiesWeatherCondition(citiesCommaSeparated)
+    fun getCitiesWeatherCondition(cityName: String) {
+        APIsCaller.getCitiesWeatherCondition(cityName)
     }
 
     fun getMyCityWeatherForecast(lat: String, lon: String) {

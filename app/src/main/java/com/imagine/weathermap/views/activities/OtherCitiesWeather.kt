@@ -21,9 +21,8 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.lang.Exception
-import android.widget.Toast
 import com.imagine.weathermap.controllers.Utils
-import org.json.JSONObject
+import kotlinx.android.synthetic.main.my_city_weather.*
 
 
 class OtherCitiesWeather : AppCompatActivity() {
@@ -115,9 +114,13 @@ class OtherCitiesWeather : AppCompatActivity() {
             circleProgress.visibility = View.VISIBLE
             // clear previous Data (if any)
             containerLayout.removeAllViews()
+            // close the keyboard
+            Utils.hideKeyboard(searchField, this@OtherCitiesWeather)
             // call the Server API
-            APIsController.getInstance(this@OtherCitiesWeather)
-                .getCitiesWeatherCondition(searchField.text.toString())
+            for (city in cities) {
+                APIsController.getInstance(this@OtherCitiesWeather)
+                    .getCitiesWeatherCondition(city)
+            }
         }
 
     }
@@ -128,13 +131,18 @@ class OtherCitiesWeather : AppCompatActivity() {
             circleProgress.visibility = View.GONE
             if (serverResEvent.success) {
                 // get the Data and display it
-                val weatherConditions = serverResEvent.responseData?.weatherConditions
                 WeatherDetails(this@OtherCitiesWeather).buildOtherCitiesForecastLayout(
-                    weatherConditions!!,
+                    serverResEvent.responseData,
+                    serverResEvent.cityName,
                     containerLayout
                 )
             } else {
                 goForError(serverResEvent.errorBody)
+                WeatherDetails(this@OtherCitiesWeather).buildOtherCitiesForecastLayout(
+                    null,
+                    serverResEvent.cityName,
+                    containerLayout
+                )
             }
         } catch (ex: Exception) {
             ex.printStackTrace()

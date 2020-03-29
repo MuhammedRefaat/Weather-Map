@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.imagine.weathermap.R
@@ -76,5 +78,24 @@ class Utils {
                 ).show()
             }
         }
+
+
+        /**
+         * To hide the keyboard when the user action Done
+         */
+        fun hideKeyboard(view: View?, context: Context) {
+            try {
+                // Check if no view has focus:
+                if (view != null) {
+                    val imm = context.getSystemService(
+                        Context.INPUT_METHOD_SERVICE
+                    ) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+            }catch (ex: Exception){
+                ex.printStackTrace()
+            }
+        }
     }
+
 }
