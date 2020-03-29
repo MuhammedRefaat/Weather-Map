@@ -136,7 +136,7 @@ class MyCityWeather : AppCompatActivity() {
         }
     }
 
-    fun getCityName(latitude: Double, longitude: Double) {
+    private fun getCityName(latitude: Double, longitude: Double) {
         val gcd = Geocoder(this@MyCityWeather, Locale.getDefault())
         val addresses = gcd.getFromLocation(latitude, longitude, 1)
         if (addresses.size > 0)
