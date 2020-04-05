@@ -85,6 +85,7 @@ class WeatherDetails : LinearLayout {
             view.weather_details.visibility = View.GONE
             view.na.visibility = View.VISIBLE
         }
+        view.tag = cityName
         containerLayout.addView(view)
         return containerLayout
     }

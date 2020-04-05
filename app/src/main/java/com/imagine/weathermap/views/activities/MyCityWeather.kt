@@ -10,30 +10,29 @@ import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.*
-import com.imagine.weathermap.controllers.Utils
+import com.imagine.weathermap.misc.Utils
 import android.location.Geocoder
 import android.os.Handler
 import android.widget.*
+import androidx.lifecycle.ViewModelProvider
 import java.util.*
 import com.imagine.weathermap.R
-import com.imagine.weathermap.controllers.APIsController
-import com.imagine.weathermap.models.ServerResEvent
+import com.imagine.weathermap.models.MyCityForecastViewModel
 import com.imagine.weathermap.views.customViews.WeatherDetails
 import okhttp3.ResponseBody
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import java.lang.Exception
 
 
 class MyCityWeather : AppCompatActivity() {
+
+    lateinit var weatherViewModel: MyCityForecastViewModel
 
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
     lateinit var cityName: TextView
     private lateinit var circleProgress: ProgressBar
     lateinit var containerLayout: LinearLayout
-    lateinit var emptyScreen : ImageView
+    lateinit var emptyScreen: ImageView
 
     var latitude: Double = 0.0
     var longitude: Double = 0.0
@@ -46,15 +45,51 @@ class MyCityWeather : AppCompatActivity() {
         circleProgress = findViewById(R.id.circular_progress)
         containerLayout = findViewById(R.id.cities_weather)
         emptyScreen = findViewById(R.id.empty_screen_decoration)
-        // Subscribe to EventBus events
-        EventBus.getDefault().register(this)
+        // declaring the view model and it's observer
+        weatherViewModel = ViewModelProvider(this).get(MyCityForecastViewModel::class.java)
+        observeWeatherViewModel()
         // Get My City Weather Details
         forecastMyCityWeather()
     }
 
+    /**
+     * View model observers subscribers for data handling
+     */
+    private fun observeWeatherViewModel() {
+        // observer for the loading process
+        weatherViewModel.loading.observe(this, androidx.lifecycle.Observer {
+            if (it) {
+                circleProgress.visibility = View.VISIBLE
+            } else {
+                circleProgress.visibility = View.GONE
+            }
+        })
+        // observer for the data success result
+        weatherViewModel.weatherForecastDataError.observe(this, androidx.lifecycle.Observer {
+            goForError(it)
+        })
+        // observer for the data error
+        weatherViewModel.weatherForecastData.observe(this, androidx.lifecycle.Observer {
+            try {
+                // get the Data and display it
+                cityName.text = it?.city?.name
+                val weatherConditions = it?.weatherConditions
+                WeatherDetails(this@MyCityWeather).buildMyCityForecastLayout(
+                    weatherConditions!!,
+                    containerLayout
+                )
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                Toast.makeText(
+                    this@MyCityWeather, resources.getText(R.string.something_went_wrong),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        EventBus.getDefault().unregister(this)
     }
 
     private fun forecastMyCityWeather() {
@@ -106,8 +141,11 @@ class MyCityWeather : AppCompatActivity() {
             latitude = locationResult.lastLocation.latitude
             longitude = locationResult.lastLocation.latitude
             // call the Server API
-            APIsController.getInstance(this@MyCityWeather)
-                .getMyCityWeatherForecast(latitude.toString(), longitude.toString())
+            weatherViewModel.getWeatherForecast(
+                this@MyCityWeather,
+                latitude.toString(),
+                longitude.toString()
+            )
         }
     }
 
@@ -125,8 +163,11 @@ class MyCityWeather : AppCompatActivity() {
                     latitude = location.latitude
                     longitude = location.longitude
                     // call the Server API
-                    APIsController.getInstance(this@MyCityWeather)
-                        .getMyCityWeatherForecast(latitude.toString(), longitude.toString())
+                    weatherViewModel.getWeatherForecast(
+                        this@MyCityWeather,
+                        latitude.toString(),
+                        longitude.toString()
+                    )
                 }
             }
         } else {
@@ -161,27 +202,6 @@ class MyCityWeather : AppCompatActivity() {
         cityName.text = ""
         containerLayout.removeAllViews()
         forecastMyCityWeather()
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun serverResponseReceived(serverResEvent: ServerResEvent) {
-        try {
-            circleProgress.visibility = View.GONE
-            if (serverResEvent.success) {
-                // get the Data and display it
-                cityName.text = serverResEvent.responseData?.city?.name
-                val weatherConditions = serverResEvent.responseData?.weatherConditions
-                WeatherDetails(this@MyCityWeather).buildMyCityForecastLayout(
-                    weatherConditions!!,
-                    containerLayout
-                )
-            } else {
-                goForError(serverResEvent.errorBody)
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-            goForError(serverResEvent.errorBody)
-        }
     }
 
     private fun goForError(errorBody: ResponseBody?) {

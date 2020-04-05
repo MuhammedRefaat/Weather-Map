@@ -1,13 +1,16 @@
-package com.devtides.countries.di
+package com.imagine.weathermap.network
 
-import com.devtides.countries.model.CountriesService
-import com.devtides.countries.viewmodel.ListViewModel
+import com.imagine.weathermap.models.CitySearchWeatherViewModel
+import com.imagine.weathermap.models.MyCityForecastViewModel
 import dagger.Component
 
-@Component(modules = [ApiModule::class])
+@Component(modules = [APIsClient::class])
 interface ApiComponent {
 
-    fun inject(service: CountriesService)
+    fun inject(service: APIsCaller)
 
-    fun inject(viewModel: ListViewModel)
+    fun inject(viewModel: MyCityForecastViewModel)
+
+    fun inject(viewModel: CitySearchWeatherViewModel)
+
 }

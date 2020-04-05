@@ -11,20 +11,20 @@ import android.widget.*
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.core.widget.ImageViewCompat
+import androidx.lifecycle.ViewModelProvider
 import com.imagine.weathermap.R
-import com.imagine.weathermap.controllers.APIsController
-import com.imagine.weathermap.models.ServerResEvent
 import com.imagine.weathermap.views.customViews.WeatherDetails
 import okhttp3.ResponseBody
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import java.lang.Exception
-import com.imagine.weathermap.controllers.Utils
+import com.imagine.weathermap.misc.Utils
+import com.imagine.weathermap.models.CitySearchWeatherViewModel
 
 
 class OtherCitiesWeather : AppCompatActivity() {
+
+    lateinit var weatherViewModel: CitySearchWeatherViewModel
 
     lateinit var searchIcon: ImageView
     lateinit var searchField: EditText
@@ -43,15 +43,80 @@ class OtherCitiesWeather : AppCompatActivity() {
         circleProgress = findViewById(R.id.circular_progress)
         containerLayout = findViewById(R.id.cities_weather)
         emptyScreen = findViewById(R.id.empty_screen_decoration)
+        // declaring the view model
+        weatherViewModel = ViewModelProvider(this).get(CitySearchWeatherViewModel::class.java)
+        observeWeatherViewModel()
         // add text watcher for the Search TextField
         searchField.addTextChangedListener(searchTextWatcher)
-        // Subscribe to EventBus events
-        EventBus.getDefault().register(this)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        EventBus.getDefault().unregister(this)
+    /**
+     * View model observers subscribers for data handling
+     */
+    private fun observeWeatherViewModel() {
+        // observer for the loading process
+        weatherViewModel.loading.observe(this, androidx.lifecycle.Observer {
+            if (it) {
+                circleProgress.visibility = View.VISIBLE
+            } else {
+                circleProgress.visibility = View.GONE
+            }
+        })
+        // observer for the data success result
+        weatherViewModel.weatherDetailsDataError.observe(this, androidx.lifecycle.Observer {
+            // get the New Errorn Data to handle/display
+            for ((cityName, weatherConditionError) in it) {
+                var cityIsThere = false
+                // first check if city is already displayed in the layout
+                for (singleCity in containerLayout.children) {
+                    if ((singleCity as LinearLayout).tag == cityName) {
+                        cityIsThere = true
+                        break
+                    }
+                }
+                // if city already displayed, no need to repaint
+                if (cityIsThere)
+                    continue
+                // if not, go for it
+                goForError(weatherConditionError)
+                WeatherDetails(this@OtherCitiesWeather).buildOtherCitiesForecastLayout(
+                    null,
+                    cityName,
+                    containerLayout
+                )
+            }
+        })
+        // observer for the data error
+        weatherViewModel.weatherDetailsData.observe(this, androidx.lifecycle.Observer {
+            try {
+                // get the Data and display it
+                for ((cityName, weatherCondition) in it) {
+                    var cityIsThere = false
+                    // first check if city is already displayed in the layout
+                    for (singleCity in containerLayout.children) {
+                        if ((singleCity as LinearLayout).tag == cityName) {
+                            cityIsThere = true
+                            break
+                        }
+                    }
+                    // if city already displayed, no need to repaint
+                    if (cityIsThere)
+                        continue
+                    // if not, go for it
+                    WeatherDetails(this@OtherCitiesWeather).buildOtherCitiesForecastLayout(
+                        weatherCondition,
+                        cityName,
+                        containerLayout
+                    )
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                Toast.makeText(
+                    this@OtherCitiesWeather, resources.getText(R.string.something_went_wrong),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
     }
 
     /**
@@ -120,37 +185,9 @@ class OtherCitiesWeather : AppCompatActivity() {
             // close the keyboard
             Utils.hideKeyboard(searchField, this@OtherCitiesWeather)
             // call the Server API
-            for (city in cities) {
-                APIsController.getInstance(this@OtherCitiesWeather)
-                    .getCitiesWeatherCondition(city)
-            }
+            weatherViewModel.getWeatherDetails(this@OtherCitiesWeather, cities)
         }
 
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun serverResponseReceived(serverResEvent: ServerResEvent) {
-        try {
-            circleProgress.visibility = View.GONE
-            if (serverResEvent.success) {
-                // get the Data and display it
-                WeatherDetails(this@OtherCitiesWeather).buildOtherCitiesForecastLayout(
-                    serverResEvent.responseData,
-                    serverResEvent.cityName,
-                    containerLayout
-                )
-            } else {
-                goForError(serverResEvent.errorBody)
-                WeatherDetails(this@OtherCitiesWeather).buildOtherCitiesForecastLayout(
-                    null,
-                    serverResEvent.cityName,
-                    containerLayout
-                )
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-            goForError(serverResEvent.errorBody)
-        }
     }
 
     private fun goForError(errorBody: ResponseBody?) {

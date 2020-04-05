@@ -1,4 +1,4 @@
-package com.imagine.weathermap.controllers
+package com.imagine.weathermap.misc
 
 import android.Manifest
 import android.app.Activity
