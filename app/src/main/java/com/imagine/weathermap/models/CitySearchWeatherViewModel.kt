@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.imagine.weathermap.network.APIsCaller
 import com.imagine.weathermap.network.APIsClient
 import com.imagine.weathermap.network.DaggerApiComponent
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -16,8 +19,6 @@ class CitySearchWeatherViewModel : ViewModel() {
 
     @Inject
     lateinit var weatherService: APIsCaller
-
-    private lateinit var context: Context
 
     val weatherDetailsList = HashMap<String, APIsData>()
 
@@ -35,36 +36,36 @@ class CitySearchWeatherViewModel : ViewModel() {
             .build().inject(this)
     }
 
-    fun getWeatherDetails(context: Context, cities: List<String>) {
-        this.context = context
+    fun getWeatherDetails(cities: List<String>) {
+        weatherDetailsList.clear()
+        weatherDetailsListError.clear()
+        weatherDetailsData.value = weatherDetailsList
+        weatherDetailsDataError.value = weatherDetailsListError
         getCitiesWeatherData(cities)
     }
 
     private fun getCitiesWeatherData(cities: List<String>) {
         for (city in cities) {
-            weatherService.getCityWeatherCondition(city).enqueue(object : Callback<APIsData> {
-                override fun onResponse(call: Call<APIsData>, response: Response<APIsData>) {
-                    loading.value = false
-                    if (response.isSuccessful) {
+            weatherService.getCityWeatherCondition(city).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<APIsData>() {
+                    override fun onSuccess(response: APIsData?) {
+                        loading.value = false
                         try {
-                            weatherDetailsList[city] = response.body()!!
+                            weatherDetailsList[city] = response!!
                             weatherDetailsData.value = weatherDetailsList
                         } catch (ex: Exception) {
                             weatherDetailsListError[city] = null
                             weatherDetailsDataError.value = weatherDetailsListError
                         }
-                    } else {
-                        weatherDetailsListError[city] = response.errorBody()!!
+                    }
+
+                    override fun onError(e: Throwable?) {
+                        loading.value = false
+                        weatherDetailsListError[city] = null
                         weatherDetailsDataError.value = weatherDetailsListError
                     }
-                }
-
-                override fun onFailure(call: Call<APIsData>, t: Throwable) {
-                    loading.value = false
-                    weatherDetailsListError[city] = null
-                    weatherDetailsDataError.value = weatherDetailsListError
-                }
-            })
+                })
         }
     }
 

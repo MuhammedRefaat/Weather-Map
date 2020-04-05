@@ -142,7 +142,6 @@ class MyCityWeather : AppCompatActivity() {
             longitude = locationResult.lastLocation.latitude
             // call the Server API
             weatherViewModel.getWeatherForecast(
-                this@MyCityWeather,
                 latitude.toString(),
                 longitude.toString()
             )
@@ -164,7 +163,6 @@ class MyCityWeather : AppCompatActivity() {
                     longitude = location.longitude
                     // call the Server API
                     weatherViewModel.getWeatherForecast(
-                        this@MyCityWeather,
                         latitude.toString(),
                         longitude.toString()
                     )

@@ -16,7 +16,6 @@ import androidx.core.widget.ImageViewCompat
 import androidx.lifecycle.ViewModelProvider
 import com.imagine.weathermap.R
 import com.imagine.weathermap.views.customViews.WeatherDetails
-import okhttp3.ResponseBody
 import java.lang.Exception
 import com.imagine.weathermap.misc.Utils
 import com.imagine.weathermap.models.CitySearchWeatherViewModel
@@ -78,7 +77,6 @@ class OtherCitiesWeather : AppCompatActivity() {
                 if (cityIsThere)
                     continue
                 // if not, go for it
-                goForError(weatherConditionError)
                 WeatherDetails(this@OtherCitiesWeather).buildOtherCitiesForecastLayout(
                     null,
                     cityName,
@@ -185,13 +183,9 @@ class OtherCitiesWeather : AppCompatActivity() {
             // close the keyboard
             Utils.hideKeyboard(searchField, this@OtherCitiesWeather)
             // call the Server API
-            weatherViewModel.getWeatherDetails(this@OtherCitiesWeather, cities)
+            weatherViewModel.getWeatherDetails(cities)
         }
 
-    }
-
-    private fun goForError(errorBody: ResponseBody?) {
-        Utils.displayError(this@OtherCitiesWeather, errorBody)
     }
 
 }
