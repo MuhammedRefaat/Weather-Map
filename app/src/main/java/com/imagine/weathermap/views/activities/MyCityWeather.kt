@@ -153,7 +153,7 @@ class MyCityWeather : AppCompatActivity() {
         circleProgress.visibility = View.VISIBLE
         emptyScreen.visibility = View.GONE
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        if (Utils.isLocationEnabled(this)) {
+        if (Utils.isLocationEnabled( this)) {
             mFusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
                 val location: Location? = task.result
                 if (location == null) {
