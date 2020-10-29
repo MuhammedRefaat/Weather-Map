@@ -8,7 +8,8 @@ class AppConstants {
 
         const val APIS_URL = "https://api.openweathermap.org/data/2.5/"
 
-        const val MY_CITY_API_URL_EXT = "forecast"
+        const val MY_CITY_API_URL_EXT =
+            "weather" // use 'forecast' in case you want to get data for big period
 
         const val OTHER_CITIES_API_URL_EXT = "weather"
 

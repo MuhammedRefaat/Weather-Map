@@ -25,10 +25,11 @@
         android:layout_marginBottom="10dp"
         android:gravity="center"
         android:text="@string/app_title"
-        android:textSize="12sp"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp" />
 
     <LinearLayout
+        android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/logo"
@@ -69,5 +70,6 @@
             android:textColor="@color/colorAccent" />
 
     </LinearLayout>
+
 
 </RelativeLayout>

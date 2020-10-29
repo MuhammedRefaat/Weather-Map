@@ -137,12 +137,6 @@ class OtherCitiesWeather : AppCompatActivity() {
                     this@OtherCitiesWeather,
                     R.color.colorPrimary
                 )
-                if (searchField.text.split(",").size > 7) {
-                    errorText.text = getString(R.string.cities_more)
-                    errorText.visibility = View.VISIBLE
-                } else {
-                    errorText.visibility = View.INVISIBLE
-                }
             }
         }
     }
@@ -165,12 +159,9 @@ class OtherCitiesWeather : AppCompatActivity() {
         }, 150)
         // do the work
         val cities = searchField.text.split(",")
-        if (cities.size < 3 || cities.size > 7) { // No Search for you
+        if (cities.isEmpty()) { // No Search for you
             errorText.visibility = View.VISIBLE
-            if (cities.size < 3)
-                errorText.text = getString(R.string.cities_less)
-            else
-                errorText.text = getString(R.string.cities_more)
+            errorText.text = getString(R.string.cities_less)
             return
         } else {
             // Start Searching

@@ -38,32 +38,30 @@ class WeatherDetails : LinearLayout {
 
     @SuppressLint("SetTextI18n")
     fun buildMyCityForecastLayout(
-        weatherConditions: List<APIsData.WeatherCondition>,
+        weatherCondition: APIsData,
         containerLayout: LinearLayout
     ): LinearLayout {
-        for (weatherCondition in weatherConditions) {
-            val view = LayoutInflater.from(context)
-                .inflate(R.layout.single_city_weather, this, false)
-            try {
-                view.city_name.text = weatherCondition.dtText
-                view.temperature_min.text = "Min. " + weatherCondition.main!!.tempMin
-                view.temperature_max.text = "Max. " + weatherCondition.main.tempMax
-                view.Weather_desc.text = weatherCondition.weather!![0].description!!
-                view.wind_speed.text = weatherCondition.wind!!.speed
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-                view.weather_details.visibility = View.GONE
-                view.na.visibility = View.VISIBLE
-            }
-            containerLayout.addView(view)
+        val view = LayoutInflater.from(context)
+            .inflate(R.layout.single_city_weather, this, false)
+        try {
+            view.city_name.visibility = View.GONE
+            view.temperature_min.text = "Temp " + weatherCondition.main!!.temp
+            view.temperature_max.text = "Feels Like " + weatherCondition.main.feelsLike
+            view.Weather_desc.text = weatherCondition.weather!![0].description!!
+            view.wind_speed.text = weatherCondition.wind!!.speed
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            view.weather_details.visibility = View.GONE
+            view.na.visibility = View.VISIBLE
         }
+        containerLayout.addView(view)
         return containerLayout
     }
 
     @SuppressLint("SetTextI18n")
     fun buildOtherCitiesForecastLayout(
         weatherCondition: APIsData?,
-        cityName : String,
+        cityName: String,
         containerLayout: LinearLayout
     ): LinearLayout {
         val view = LayoutInflater.from(context)
@@ -80,7 +78,7 @@ class WeatherDetails : LinearLayout {
                 view.weather_details.visibility = View.GONE
                 view.na.visibility = View.VISIBLE
             }
-        }else{
+        } else {
             view.city_name.text = cityName
             view.weather_details.visibility = View.GONE
             view.na.visibility = View.VISIBLE

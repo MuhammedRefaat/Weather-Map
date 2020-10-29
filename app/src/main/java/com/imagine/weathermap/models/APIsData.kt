@@ -10,6 +10,9 @@ class APIsData {
 
     // For My City Data (using lat,lon)
 
+    @SerializedName("weatherCondition")
+    val weatherCondition: WeatherCondition? = null
+
     @SerializedName("list")
     val weatherConditions: List<WeatherCondition>? = null
 

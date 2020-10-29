@@ -72,10 +72,10 @@ class MyCityWeather : AppCompatActivity() {
         weatherViewModel.weatherForecastData.observe(this, androidx.lifecycle.Observer {
             try {
                 // get the Data and display it
-                cityName.text = it?.city?.name
-                val weatherConditions = it?.weatherConditions
+                cityName.text = it?.name
+                val weatherCondition = it
                 WeatherDetails(this@MyCityWeather).buildMyCityForecastLayout(
-                    weatherConditions!!,
+                    weatherCondition!!,
                     containerLayout
                 )
             } catch (ex: Exception) {
@@ -153,7 +153,7 @@ class MyCityWeather : AppCompatActivity() {
         circleProgress.visibility = View.VISIBLE
         emptyScreen.visibility = View.GONE
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        if (Utils.isLocationEnabled( this)) {
+        if (Utils.isLocationEnabled(this)) {
             mFusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
                 val location: Location? = task.result
                 if (location == null) {

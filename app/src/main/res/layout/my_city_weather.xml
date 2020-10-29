@@ -44,6 +44,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/city_area"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -65,14 +66,29 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginEnd="20dp"
-                android:hint="@string/locating_you"
                 android:layout_marginRight="20dp"
                 android:gravity="center"
+                android:hint="@string/locating_you"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 
         </LinearLayout>
+
+        <ToggleButton
+            android:id="@+id/chkState"
+            android:layout_width="55dp"
+            android:layout_height="35dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/toggle_selector"
+            android:checked="true"
+            android:textColor="@color/colorAccent"
+            android:textOff="@string/f"
+            android:textOn="@string/c"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/empty_screen_decoration"
