@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -53,7 +54,8 @@
             android:onClick="myCityWeather"
             android:text="@string/your_city"
             android:textAllCaps="false"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/other_cities"
@@ -67,9 +69,24 @@
             android:onClick="otherCitiesWeather"
             android:text="@string/other_cities"
             android:textAllCaps="false"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
+    <eu.davidea.flipview.FlipView
+        android:id="@+id/c_or_f"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/buttons"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:autoStart="false"
+        android:background="@color/colorAccent"
+        android:flipInterval="500"
+        app:frontBackground="@color/colorAccent"
+        app:frontImage="@drawable/cc2"
+        app:rearBackground="@color/colorAccent"
+        app:rearImage="@drawable/ff2" />
 
 </RelativeLayout>

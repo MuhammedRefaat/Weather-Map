@@ -3,6 +3,7 @@ package com.imagine.weathermap.misc
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.view.View
@@ -10,9 +11,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.imagine.weathermap.R
+import com.imagine.weathermap.views.activities.MainActivity
+import com.imagine.weathermap.views.activities.MainActivity.Companion.IS_C
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import java.lang.Exception
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 
 class Utils {
@@ -92,9 +97,49 @@ class Utils {
                     ) as InputMethodManager
                     imm.hideSoftInputFromWindow(view.windowToken, 0)
                 }
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 ex.printStackTrace()
             }
+        }
+
+
+        /**
+         * to set the shared preferences value for C or F degree type set
+         */
+        fun setCF(): Boolean {
+            try {
+                val isC = !MainActivity.sharedPreferences.getBoolean(IS_C, true)
+                val editor: SharedPreferences.Editor = MainActivity.sharedPreferences.edit()
+                editor.putBoolean(IS_C, isC)
+                editor.apply()
+                editor.commit()
+                MainActivity.isC = isC
+                return isC
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+            return true;
+        }
+
+        // setting the temperature as if it's in C or F format
+        fun tempValue(temp: String?, isC: Boolean): CharSequence? {
+            lateinit var tempValue: CharSequence
+            tempValue = temp.toString()
+            if (isC) {
+                tempValue = (BigDecimal((5.0 / 9.0) * (temp!!.toDoubleOrNull()!! - 32.0)).setScale(
+                    2,
+                    RoundingMode.HALF_EVEN
+                )).toString()
+            }
+            return tempValue
+        }
+
+        fun getUnit(isC: Boolean): String {
+            return "imperial"
+            /*return if (isC)
+                "metric"
+            else
+                "imperial"*/
         }
     }
 

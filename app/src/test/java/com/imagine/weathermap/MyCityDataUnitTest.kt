@@ -48,10 +48,16 @@ class MyCityDataUnitTest {
             gson.fromJson(DataValidatorUnitTest.sampleMyCityServerResponse, APIsData::class.java)
         testMyCityData = Single.just(myCityJsonData)
 
-        Mockito.`when`(apisCaller.getMyCityWeatherForecast("30.05", lon = "31.24"))
+        Mockito.`when`(
+            apisCaller.getMyCityWeatherForecast(
+                "30.05",
+                lon = "31.24",
+                unit = "imperial"
+            )
+        )
             .thenReturn(testMyCityData)
 
-        myCityForecastViewModel.getWeatherForecast(lat = "30.05", lon = "31.24")
+        myCityForecastViewModel.getWeatherForecast(lat = "30.05", lon = "31.24", unit = "imperial")
 
         Assert.assertTrue(
             myCityForecastViewModel.weatherForecastData.value?.weatherConditions!![0]
@@ -69,9 +75,9 @@ class MyCityDataUnitTest {
     fun testFailResults() {
         testMyCityData = Single.error(Throwable())
 
-        Mockito.`when`(apisCaller.getMyCityWeatherForecast("", "")).thenReturn(testMyCityData)
+        Mockito.`when`(apisCaller.getMyCityWeatherForecast("", "", "")).thenReturn(testMyCityData)
 
-        myCityForecastViewModel.getWeatherForecast(lat = "", lon = "")
+        myCityForecastViewModel.getWeatherForecast(lat = "", lon = "", unit = "")
 
         Assert.assertEquals(null, myCityForecastViewModel.weatherForecastData.value)
         Assert.assertEquals(false, myCityForecastViewModel.loading.value)

@@ -60,12 +60,29 @@ class APIsData {
             @SerializedName("description")
             val description: String? = null
 
+            @SerializedName("main")
+            val clouds: String? = null
+
         }
 
         inner class Wind {
 
             @SerializedName("speed")
             val speed: String? = null
+
+        }
+
+        inner class Cloud {
+
+            @SerializedName("all")
+            val clouds: String? = null
+
+        }
+
+        inner class Rain {
+
+            @SerializedName("rain")
+            val rain: String? = null
 
         }
 
@@ -88,6 +105,12 @@ class APIsData {
 
     @SerializedName("wind")
     val wind: WeatherCondition.Wind? = null
+
+    @SerializedName("clouds")
+    val cloud: WeatherCondition.Cloud? = null
+
+    @SerializedName("rain")
+    val rain: WeatherCondition.Rain? = null
 
     @SerializedName("dt_txt")
     val dtText: String? = null

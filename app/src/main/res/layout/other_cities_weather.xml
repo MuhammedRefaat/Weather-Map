@@ -10,14 +10,38 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:contentDescription="@string/back_button"
-            android:onClick="goBack"
-            android:scaleType="fitStart"
-            android:tint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_back" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/back_button"
+                android:onClick="goBack"
+                android:scaleType="fitStart"
+                android:tint="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_back" />
+
+            <eu.davidea.flipview.FlipView
+                android:id="@+id/c_or_f"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:autoStart="false"
+                android:background="@color/colorAccent"
+                android:flipInterval="500"
+                android:onClick="changeCFOtherCities"
+                app:frontBackground="@color/colorAccent"
+                app:frontImage="@drawable/cc2"
+                app:rearBackground="@color/colorAccent"
+                app:rearImage="@drawable/ff2" />
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/search_layout"

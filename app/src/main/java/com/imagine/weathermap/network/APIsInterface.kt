@@ -17,12 +17,14 @@ interface APIsInterface {
     fun myCityWeatherForecast(
         @Query("lat") lat: String,
         @Query("lon") lon: String,
+        @Query("units")unit: String,
         @Query("appid") appId: String
     ): Single<APIsData>
 
     @POST(AppConstants.OTHER_CITIES_API_URL_EXT)
     fun otherCitiesWeatherInfo(
         @Query("q") cityName: String,
+        @Query("units")unit: String,
         @Query("appid") appId: String
     ): Single<APIsData>
 

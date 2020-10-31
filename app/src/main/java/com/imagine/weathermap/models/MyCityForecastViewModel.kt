@@ -20,6 +20,8 @@ class MyCityForecastViewModel : ViewModel() {
 
     private lateinit var longitude: String
 
+    private lateinit var unit: String
+
     val weatherForecastData = MutableLiveData<APIsData>()
 
     val weatherForecastDataError = MutableLiveData<ResponseBody>()
@@ -32,14 +34,15 @@ class MyCityForecastViewModel : ViewModel() {
             .build().inject(this)
     }
 
-    fun getWeatherForecast(lat: String, lon: String) {
+    fun getWeatherForecast(lat: String, lon: String, unit: String) {
         this.latitude = lat
         this.longitude = lon
+        this.unit = unit
         getMyCityWeatherForecast()
     }
 
     private fun getMyCityWeatherForecast() {
-        weatherService.getMyCityWeatherForecast(latitude, longitude)
+        weatherService.getMyCityWeatherForecast(latitude, longitude, unit)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : DisposableSingleObserver<APIsData>() {
@@ -51,6 +54,7 @@ class MyCityForecastViewModel : ViewModel() {
                         weatherForecastDataError.value = null
                     }
                 }
+
                 override fun onError(e: Throwable?) {
                     loading.value = false
                     weatherForecastDataError.value = null

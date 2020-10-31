@@ -20,15 +20,15 @@ class APIsCaller {
     /**
      * Getting current city weather forecast by city location
      */
-    fun getMyCityWeatherForecast(lat: String, lon: String): Single<APIsData> {
-        return api.myCityWeatherForecast(lat, lon, AppConstants.APP_KEY)
+    fun getMyCityWeatherForecast(lat: String, lon: String, unit: String): Single<APIsData> {
+        return api.myCityWeatherForecast(lat, lon, unit, AppConstants.APP_KEY)
     }
 
     /**
      * Getting city weather condition by city name
      */
-    fun getCityWeatherCondition(cityName: String): Single<APIsData> {
-        return api.otherCitiesWeatherInfo(cityName, AppConstants.APP_KEY)
+    fun getCityWeatherCondition(cityName: String, unit: String): Single<APIsData> {
+        return api.otherCitiesWeatherInfo(cityName, unit, AppConstants.APP_KEY)
     }
 
 }

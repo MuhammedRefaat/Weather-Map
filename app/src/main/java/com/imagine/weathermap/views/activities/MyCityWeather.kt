@@ -17,8 +17,11 @@ import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import java.util.*
 import com.imagine.weathermap.R
+import com.imagine.weathermap.models.APIsData
 import com.imagine.weathermap.models.MyCityForecastViewModel
 import com.imagine.weathermap.views.customViews.WeatherDetails
+import eu.davidea.flipview.FlipView
+import kotlinx.android.synthetic.main.activity_main.view.*
 import okhttp3.ResponseBody
 import java.lang.Exception
 
@@ -32,10 +35,14 @@ class MyCityWeather : AppCompatActivity() {
     lateinit var cityName: TextView
     private lateinit var circleProgress: ProgressBar
     lateinit var containerLayout: LinearLayout
-    lateinit var emptyScreen: ImageView
+    private lateinit var emptyScreen: ImageView
+    private lateinit var cOrF: FlipView
 
     var latitude: Double = 0.0
     var longitude: Double = 0.0
+
+    private lateinit var weatherCondition: APIsData
+    var isC = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +52,12 @@ class MyCityWeather : AppCompatActivity() {
         circleProgress = findViewById(R.id.circular_progress)
         containerLayout = findViewById(R.id.cities_weather)
         emptyScreen = findViewById(R.id.empty_screen_decoration)
+        cOrF = findViewById(R.id.c_or_f)
+        // get the measuring unit
+        isC = intent.getBooleanExtra(MainActivity.IS_C, true)
+        if (!isC)
+            cOrF.flip(true)
+        cOrF.setOnClickListener(changeCF)
         // declaring the view model and it's observer
         weatherViewModel = ViewModelProvider(this).get(MyCityForecastViewModel::class.java)
         observeWeatherViewModel()
@@ -73,10 +86,11 @@ class MyCityWeather : AppCompatActivity() {
             try {
                 // get the Data and display it
                 cityName.text = it?.name
-                val weatherCondition = it
+                weatherCondition = it
                 WeatherDetails(this@MyCityWeather).buildMyCityForecastLayout(
-                    weatherCondition!!,
-                    containerLayout
+                    weatherCondition,
+                    containerLayout,
+                    isC
                 )
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -143,7 +157,8 @@ class MyCityWeather : AppCompatActivity() {
             // call the Server API
             weatherViewModel.getWeatherForecast(
                 latitude.toString(),
-                longitude.toString()
+                longitude.toString(),
+                Utils.getUnit(isC)
             )
         }
     }
@@ -164,7 +179,8 @@ class MyCityWeather : AppCompatActivity() {
                     // call the Server API
                     weatherViewModel.getWeatherForecast(
                         latitude.toString(),
-                        longitude.toString()
+                        longitude.toString(),
+                        Utils.getUnit(isC)
                     )
                 }
             }
@@ -209,4 +225,19 @@ class MyCityWeather : AppCompatActivity() {
             getCityName(latitude, longitude)
         }
     }
+
+    private val changeCF = View.OnClickListener { view ->
+        isC = Utils.setCF()
+        view.c_or_f.flip(!isC)
+        try {
+            WeatherDetails(this@MyCityWeather).buildMyCityForecastLayout(
+                weatherCondition,
+                containerLayout,
+                isC
+            )
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+
 }

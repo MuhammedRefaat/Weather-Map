@@ -18,7 +18,10 @@ import com.imagine.weathermap.R
 import com.imagine.weathermap.views.customViews.WeatherDetails
 import java.lang.Exception
 import com.imagine.weathermap.misc.Utils
+import com.imagine.weathermap.models.APIsData
 import com.imagine.weathermap.models.CitySearchWeatherViewModel
+import eu.davidea.flipview.FlipView
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 
 class OtherCitiesWeather : AppCompatActivity() {
@@ -31,6 +34,9 @@ class OtherCitiesWeather : AppCompatActivity() {
     lateinit var circleProgress: ProgressBar
     lateinit var containerLayout: LinearLayout
     lateinit var emptyScreen: ImageView
+    lateinit var cOrF: FlipView
+    private lateinit var citiesWeatherConditions: Map<String, APIsData>
+    var isC = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +48,12 @@ class OtherCitiesWeather : AppCompatActivity() {
         circleProgress = findViewById(R.id.circular_progress)
         containerLayout = findViewById(R.id.cities_weather)
         emptyScreen = findViewById(R.id.empty_screen_decoration)
+        cOrF = findViewById(R.id.c_or_f)
+        // get the measuring unit
+        isC = intent.getBooleanExtra(MainActivity.IS_C, true)
+        if (!isC)
+            cOrF.flip(true)
+        cOrF.setOnClickListener(changeCF)
         // declaring the view model
         weatherViewModel = ViewModelProvider(this).get(CitySearchWeatherViewModel::class.java)
         observeWeatherViewModel()
@@ -80,7 +92,8 @@ class OtherCitiesWeather : AppCompatActivity() {
                 WeatherDetails(this@OtherCitiesWeather).buildOtherCitiesForecastLayout(
                     null,
                     cityName,
-                    containerLayout
+                    containerLayout,
+                    isC
                 )
             }
         })
@@ -88,25 +101,8 @@ class OtherCitiesWeather : AppCompatActivity() {
         weatherViewModel.weatherDetailsData.observe(this, androidx.lifecycle.Observer {
             try {
                 // get the Data and display it
-                for ((cityName, weatherCondition) in it) {
-                    var cityIsThere = false
-                    // first check if city is already displayed in the layout
-                    for (singleCity in containerLayout.children) {
-                        if ((singleCity as LinearLayout).tag == cityName) {
-                            cityIsThere = true
-                            break
-                        }
-                    }
-                    // if city already displayed, no need to repaint
-                    if (cityIsThere)
-                        continue
-                    // if not, go for it
-                    WeatherDetails(this@OtherCitiesWeather).buildOtherCitiesForecastLayout(
-                        weatherCondition,
-                        cityName,
-                        containerLayout
-                    )
-                }
+                citiesWeatherConditions = it
+                displayWeatherData()
             } catch (ex: Exception) {
                 ex.printStackTrace()
                 Toast.makeText(
@@ -115,6 +111,29 @@ class OtherCitiesWeather : AppCompatActivity() {
                 ).show()
             }
         })
+    }
+
+    private fun displayWeatherData() {
+        for ((cityName, weatherCondition) in citiesWeatherConditions) {
+            var cityIsThere = false
+            // first check if city is already displayed in the layout
+            for (singleCity in containerLayout.children) {
+                if ((singleCity as LinearLayout).tag == cityName) {
+                    cityIsThere = true
+                    break
+                }
+            }
+            // if city already displayed, no need to repaint
+            if (cityIsThere)
+                continue
+            // if not, go for it
+            WeatherDetails(this@OtherCitiesWeather).buildOtherCitiesForecastLayout(
+                weatherCondition,
+                cityName,
+                containerLayout,
+                isC
+            )
+        }
     }
 
     /**
@@ -174,9 +193,18 @@ class OtherCitiesWeather : AppCompatActivity() {
             // close the keyboard
             Utils.hideKeyboard(searchField, this@OtherCitiesWeather)
             // call the Server API
-            weatherViewModel.getWeatherDetails(cities)
+            weatherViewModel.getWeatherDetails(cities, Utils.getUnit(isC))
         }
 
+    }
+
+    private val changeCF = View.OnClickListener { view ->
+        isC = Utils.setCF()
+        view.c_or_f.flip(!isC)
+        if (containerLayout.childCount > 0 && citiesWeatherConditions.isNotEmpty()) {
+            containerLayout.removeAllViews()
+            displayWeatherData()
+        }
     }
 
 }

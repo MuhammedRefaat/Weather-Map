@@ -48,10 +48,11 @@ class OtherCityDataUnitTest {
             gson.fromJson(DataValidatorUnitTest.sampleOtherCityServerResponse, APIsData::class.java)
         testOtherCityData = Single.just(cityJsonData)
 
-        Mockito.`when`(apisCaller.getCityWeatherCondition("")).thenReturn(testOtherCityData)
+        Mockito.`when`(apisCaller.getCityWeatherCondition("", "imperial"))
+            .thenReturn(testOtherCityData)
 
         val cities = ","
-        citySearchWeatherViewModel.getWeatherDetails(cities.split(","))
+        citySearchWeatherViewModel.getWeatherDetails(cities.split(","), "imperial")
 
         Assert.assertEquals(1, citySearchWeatherViewModel.weatherDetailsList.size)
         Assert.assertEquals(null, citySearchWeatherViewModel.weatherDetailsDataError.value)
@@ -62,10 +63,11 @@ class OtherCityDataUnitTest {
     fun testFailResults() {
         testOtherCityData = Single.error(Throwable())
 
-        Mockito.`when`(apisCaller.getCityWeatherCondition("")).thenReturn(testOtherCityData)
+        Mockito.`when`(apisCaller.getCityWeatherCondition("", "imperial"))
+            .thenReturn(testOtherCityData)
 
         val cities = ","
-        citySearchWeatherViewModel.getWeatherDetails(cities.split(","))
+        citySearchWeatherViewModel.getWeatherDetails(cities.split(","), "imperial")
 
         Assert.assertEquals(null, citySearchWeatherViewModel.weatherDetailsData.value)
         Assert.assertEquals(false, citySearchWeatherViewModel.loading.value)

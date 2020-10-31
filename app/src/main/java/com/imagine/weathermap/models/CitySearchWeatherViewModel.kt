@@ -36,17 +36,17 @@ class CitySearchWeatherViewModel : ViewModel() {
             .build().inject(this)
     }
 
-    fun getWeatherDetails(cities: List<String>) {
+    fun getWeatherDetails(cities: List<String>, unit: String) {
         weatherDetailsList.clear()
         weatherDetailsListError.clear()
         weatherDetailsData.value = weatherDetailsList
         weatherDetailsDataError.value = weatherDetailsListError
-        getCitiesWeatherData(cities)
+        getCitiesWeatherData(cities, unit)
     }
 
-    private fun getCitiesWeatherData(cities: List<String>) {
+    private fun getCitiesWeatherData(cities: List<String>, unit: String) {
         for (city in cities) {
-            weatherService.getCityWeatherCondition(city).subscribeOn(Schedulers.newThread())
+            weatherService.getCityWeatherCondition(city, unit).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<APIsData>() {
                     override fun onSuccess(response: APIsData?) {

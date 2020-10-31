@@ -9,11 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import com.imagine.weathermap.R
+import com.imagine.weathermap.misc.Utils
 import com.imagine.weathermap.models.APIsData
 import kotlinx.android.synthetic.main.single_city_weather.view.*
 
 
 class WeatherDetails : LinearLayout {
+
     @JvmOverloads
     constructor(
         context: Context,
@@ -36,19 +38,28 @@ class WeatherDetails : LinearLayout {
         orientation = VERTICAL
     }
 
+    companion object {
+        const val FEELS_LIKE: String = "Feels Like "
+    }
+
     @SuppressLint("SetTextI18n")
     fun buildMyCityForecastLayout(
         weatherCondition: APIsData,
-        containerLayout: LinearLayout
+        containerLayout: LinearLayout,
+        isC: Boolean
     ): LinearLayout {
+        containerLayout.removeAllViews()
         val view = LayoutInflater.from(context)
             .inflate(R.layout.single_city_weather, this, false)
         try {
             view.city_name.visibility = View.GONE
-            view.temperature_min.text = "Temp " + weatherCondition.main!!.temp
-            view.temperature_max.text = "Feels Like " + weatherCondition.main.feelsLike
+            view.temperature.text = Utils.tempValue(weatherCondition.main!!.temp, isC)
+            view.feels_like.text =
+                FEELS_LIKE + Utils.tempValue(weatherCondition.main.feelsLike, isC)
             view.Weather_desc.text = weatherCondition.weather!![0].description!!
+            view.humidity.text = weatherCondition.main.humidity
             view.wind_speed.text = weatherCondition.wind!!.speed
+            view.cloud.text = weatherCondition.weather[0].clouds!!
         } catch (ex: Exception) {
             ex.printStackTrace()
             view.weather_details.visibility = View.GONE
@@ -62,17 +73,21 @@ class WeatherDetails : LinearLayout {
     fun buildOtherCitiesForecastLayout(
         weatherCondition: APIsData?,
         cityName: String,
-        containerLayout: LinearLayout
+        containerLayout: LinearLayout,
+        isC: Boolean
     ): LinearLayout {
         val view = LayoutInflater.from(context)
             .inflate(R.layout.single_city_weather, this, false)
         if (weatherCondition != null) {
             try {
                 view.city_name.text = weatherCondition.name
-                view.temperature_min.text = "Min. " + weatherCondition.main!!.tempMin
-                view.temperature_max.text = "Max. " + weatherCondition.main.tempMax
+                view.temperature.text = Utils.tempValue(weatherCondition.main!!.temp, isC)
+                view.feels_like.text =
+                    FEELS_LIKE + Utils.tempValue(weatherCondition.main.feelsLike, isC)
                 view.Weather_desc.text = weatherCondition.weather!![0].description!!
                 view.wind_speed.text = weatherCondition.wind!!.speed
+                view.humidity.text = weatherCondition.main.humidity
+                view.cloud.text = weatherCondition.weather[0].clouds!!
             } catch (ex: Exception) {
                 ex.printStackTrace()
                 view.weather_details.visibility = View.GONE

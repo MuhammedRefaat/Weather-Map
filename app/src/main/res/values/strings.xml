@@ -22,4 +22,8 @@
     <string name="widgetText">City</string>
     <string name="c">C°</string>
     <string name="f">F°</string>
+    <string name="icon">Icon</string>
+    <string name="clouds">Clouds</string>
+    <string name="rain">Rain</string>
+    <string name="humidity">Humidity</string>
 </resources>
