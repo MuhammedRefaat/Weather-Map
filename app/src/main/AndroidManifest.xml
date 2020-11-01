@@ -18,7 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".views.activities.MainActivity">
+        <activity
+            android:name=".views.activities.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,10 +28,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".views.activities.MyCityWeather" />
+        <activity
+            android:name=".views.activities.MyCityWeather"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".views.activities.OtherCitiesWeather"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
     </application>
 

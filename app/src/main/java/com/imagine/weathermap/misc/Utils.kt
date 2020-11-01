@@ -141,6 +141,31 @@ class Utils {
             else
                 "imperial"*/
         }
+
+        fun getAssetForTemp(temp: String?): Int {
+            var asset: Int = R.drawable.ic_temperature
+            try {
+                val tempValue: Double = tempValue(temp, true)!!.toString().toDoubleOrNull()!!
+                when {
+                    tempValue >= 40 -> {
+                        asset = R.drawable.ic_temperature_sunny
+                    }
+                    tempValue >= 30 -> {
+                        asset = R.drawable.ic_temperature_hot
+                    }
+                    tempValue >= 10 -> {
+                        asset = R.drawable.ic_temperature
+                    }
+                    tempValue < 10 -> {
+                        asset = R.drawable.ic_temperature_cold
+                    }
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+            return asset;
+        }
+
     }
 
 }

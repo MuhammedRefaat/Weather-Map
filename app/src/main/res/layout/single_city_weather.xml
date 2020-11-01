@@ -66,6 +66,7 @@
                     tools:ignore="UseCompoundDrawables">
 
                     <ImageView
+                        android:id="@+id/temp_icon"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_gravity="center"

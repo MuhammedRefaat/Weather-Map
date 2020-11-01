@@ -54,6 +54,7 @@ class WeatherDetails : LinearLayout {
         try {
             view.city_name.visibility = View.GONE
             view.temperature.text = Utils.tempValue(weatherCondition.main!!.temp, isC)
+            view.temp_icon.setImageResource(Utils.getAssetForTemp(weatherCondition.main.temp))
             view.feels_like.text =
                 FEELS_LIKE + Utils.tempValue(weatherCondition.main.feelsLike, isC)
             view.Weather_desc.text = weatherCondition.weather!![0].description!!
@@ -82,6 +83,7 @@ class WeatherDetails : LinearLayout {
             try {
                 view.city_name.text = weatherCondition.name
                 view.temperature.text = Utils.tempValue(weatherCondition.main!!.temp, isC)
+                view.temp_icon.setImageResource(Utils.getAssetForTemp(weatherCondition.main.temp))
                 view.feels_like.text =
                     FEELS_LIKE + Utils.tempValue(weatherCondition.main.feelsLike, isC)
                 view.Weather_desc.text = weatherCondition.weather!![0].description!!
