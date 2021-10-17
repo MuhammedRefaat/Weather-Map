@@ -13,5 +13,7 @@ class AppConstants {
 
         const val OTHER_CITIES_API_URL_EXT = "weather"
 
+        const val YODO_APP_KEY = "4o7DufvzAC"
+
     }
 }

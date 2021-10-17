@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import com.imagine.weathermap.R
 import com.imagine.weathermap.misc.Utils
+import com.imagine.weathermap.services.Yodo
 import eu.davidea.flipview.FlipView
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         cOrF = findViewById(R.id.c_or_f)
         cOrF.setOnClickListener(changeCF)
         setDegreeTypeButton()
+        // Display Banner Ad
+        Yodo(this).displayBannerAd()
     }
 
     override fun onResume() {

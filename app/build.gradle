@@ -7,15 +7,16 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.imagine.weathermap"
-        minSdkVersion 16
-        targetSdkVersion 29
+        minSdkVersion 19
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -27,6 +28,10 @@ android {
         unitTests.includeAndroidResources = true
     }
     android.defaultConfig.vectorDrawables.useSupportLibrary = true
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 
@@ -68,4 +73,6 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
     // For Flip Animation
     implementation 'eu.davidea:flipview:1.2.0'
+    // For Yodo ADS
+    implementation 'com.yodo1.mas:full:4.3.1'
 }
