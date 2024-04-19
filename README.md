@@ -3,7 +3,7 @@
 
 This Android Application has two different functionalities:
 1. Get the weather forecast for your city using your current location and display it for 3hours/5days.
-2. Get the current weather condition for 3 to 7 cities by searching using cities names.
+2. Get the current weather condition for multiple cities by searching using cities names.
 
 Each functionality can be run individually using the proper button in the Home Screen:
 
