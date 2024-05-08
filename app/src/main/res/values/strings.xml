@@ -26,4 +26,6 @@
     <string name="clouds">Clouds</string>
     <string name="rain">Rain</string>
     <string name="humidity">Humidity</string>
+    <string name="f_degree_photo">F degree photo</string>
+    <string name="c_degree_photo" />
 </resources>

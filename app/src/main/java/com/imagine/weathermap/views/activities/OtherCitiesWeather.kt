@@ -15,32 +15,34 @@ import androidx.core.view.children
 import androidx.core.widget.ImageViewCompat
 import androidx.lifecycle.ViewModelProvider
 import com.imagine.weathermap.R
+import com.imagine.weathermap.databinding.OtherCitiesWeatherBinding
 import com.imagine.weathermap.views.customViews.WeatherDetails
 import java.lang.Exception
 import com.imagine.weathermap.misc.Utils
 import com.imagine.weathermap.models.APIsData
 import com.imagine.weathermap.models.CitySearchWeatherViewModel
-import eu.davidea.flipview.FlipView
-import kotlinx.android.synthetic.main.activity_main.view.*
+import com.wajahatkarim3.easyflipview.EasyFlipView
 
 
 class OtherCitiesWeather : AppCompatActivity() {
 
     lateinit var weatherViewModel: CitySearchWeatherViewModel
-
+    lateinit var binding: OtherCitiesWeatherBinding
     lateinit var searchIcon: ImageView
     lateinit var searchField: EditText
     lateinit var errorText: TextView
     lateinit var circleProgress: ProgressBar
     lateinit var containerLayout: LinearLayout
     lateinit var emptyScreen: ImageView
-    lateinit var cOrF: FlipView
+    lateinit var cOrF: EasyFlipView
     private lateinit var citiesWeatherConditions: Map<String, APIsData>
     var isC = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.other_cities_weather)
+        binding = OtherCitiesWeatherBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         // declare views
         searchIcon = findViewById(R.id.search_icon)
         searchField = findViewById(R.id.search_field)
@@ -49,11 +51,13 @@ class OtherCitiesWeather : AppCompatActivity() {
         containerLayout = findViewById(R.id.cities_weather)
         emptyScreen = findViewById(R.id.empty_screen_decoration)
         cOrF = findViewById(R.id.c_or_f)
+        cOrF.setOnFlipListener { easyFlipView, newCurrentSide ->
+            changeCFOtherCities(cOrF)
+        }
         // get the measuring unit
         isC = intent.getBooleanExtra(MainActivity.IS_C, true)
         if (!isC)
-            cOrF.flip(true)
-        cOrF.setOnClickListener(changeCF)
+            cOrF.flipTheView()
         // declaring the view model
         weatherViewModel = ViewModelProvider(this).get(CitySearchWeatherViewModel::class.java)
         observeWeatherViewModel()
@@ -198,9 +202,9 @@ class OtherCitiesWeather : AppCompatActivity() {
 
     }
 
-    private val changeCF = View.OnClickListener { view ->
+    fun changeCFOtherCities (view: View){
         isC = Utils.setCF()
-        view.c_or_f.flip(!isC)
+        binding.cOrF.flipTheView(!isC)
         if (containerLayout.childCount > 0 && citiesWeatherConditions.isNotEmpty()) {
             containerLayout.removeAllViews()
             displayWeatherData()

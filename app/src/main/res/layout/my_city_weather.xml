@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
     android:animateLayoutChanges="true">
 
     <LinearLayout
@@ -25,25 +26,30 @@
                 android:contentDescription="@string/back_button"
                 android:onClick="goBack"
                 android:scaleType="fitStart"
-                android:tint="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_back" />
+                app:srcCompat="@drawable/ic_back"
+                app:tint="@color/colorPrimary" />
 
-            <eu.davidea.flipview.FlipView
+            <com.wajahatkarim3.easyflipview.EasyFlipView
                 android:id="@+id/c_or_f"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
+                android:layout_marginTop="20dp"
                 android:layout_toStartOf="@+id/back"
-                android:layout_toLeftOf="@+id/back"
-                android:autoStart="false"
                 android:background="@color/colorAccent"
-                android:flipInterval="500"
+                android:clickable="true"
+                android:focusable="true"
                 android:onClick="changeCFMyCity"
-                app:frontBackground="@color/colorAccent"
-                app:frontImage="@drawable/cc2"
-                app:rearBackground="@color/colorAccent"
-                app:rearImage="@drawable/ff2" />
+                android:clipToPadding="false"
+                app:flipDuration="500"
+                app:flipFrom="front"
+                app:flipType="vertical">
+                <!-- Back Layout Goes Here -->
+                <include layout="@layout/f" />
+                <!-- Front Layout Goes Here -->
+                <include layout="@layout/c" />
+            </com.wajahatkarim3.easyflipview.EasyFlipView>
 
             <ImageView
                 android:id="@+id/back"
@@ -56,8 +62,8 @@
                 android:onClick="reloadProcess"
                 android:scaleType="fitStart"
                 android:scaleX="-1"
-                android:tint="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_refresh" />
+                app:srcCompat="@drawable/ic_refresh"
+                app:tint="@color/colorPrimary" />
 
         </RelativeLayout>
 

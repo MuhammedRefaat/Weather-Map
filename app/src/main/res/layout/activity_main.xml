@@ -74,19 +74,23 @@
 
     </LinearLayout>
 
-    <eu.davidea.flipview.FlipView
+    <com.wajahatkarim3.easyflipview.EasyFlipView
         android:id="@+id/c_or_f"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_below="@+id/buttons"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:autoStart="false"
         android:background="@color/colorAccent"
-        android:flipInterval="500"
-        app:frontBackground="@color/colorAccent"
-        app:frontImage="@drawable/cc2"
-        app:rearBackground="@color/colorAccent"
-        app:rearImage="@drawable/ff2" />
+        app:flipOnTouch="true"
+        app:flipEnabled="true"
+        app:flipDuration="500"
+        app:flipType="vertical"
+        app:flipFrom="front">
+        <!-- Back Layout Goes Here -->
+        <include layout="@layout/f"/>
+        <!-- Front Layout Goes Here -->
+        <include layout="@layout/c"/>
+    </com.wajahatkarim3.easyflipview.EasyFlipView>
 
 </RelativeLayout>

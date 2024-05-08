@@ -2,12 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:clipChildren="false"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:clipChildren="false"
         android:padding="10dp">
 
         <RelativeLayout
@@ -20,26 +22,26 @@
                 android:contentDescription="@string/back_button"
                 android:onClick="goBack"
                 android:scaleType="fitStart"
-                android:tint="@color/colorPrimary"
+                app:tint="@color/colorPrimary"
                 app:srcCompat="@drawable/ic_back" />
 
-            <eu.davidea.flipview.FlipView
+            <com.wajahatkarim3.easyflipview.EasyFlipView
                 android:id="@+id/c_or_f"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:autoStart="false"
                 android:background="@color/colorAccent"
-                android:flipInterval="500"
-                android:onClick="changeCFOtherCities"
-                app:frontBackground="@color/colorAccent"
-                app:frontImage="@drawable/cc2"
-                app:rearBackground="@color/colorAccent"
-                app:rearImage="@drawable/ff2" />
+                android:clipToPadding="false"
+                app:flipDuration="500"
+                app:flipType="vertical"
+                app:flipFrom="front">
+                <!-- Back Layout Goes Here -->
+                <include layout="@layout/f"/>
+                <!-- Front Layout Goes Here -->
+                <include layout="@layout/c"/>
+            </com.wajahatkarim3.easyflipview.EasyFlipView>
 
         </RelativeLayout>
 
@@ -76,7 +78,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/search"
                 android:scaleType="fitCenter"
-                android:tint="@color/gray"
+                app:tint="@color/gray"
                 app:srcCompat="@drawable/ic_search" />
 
         </RelativeLayout>

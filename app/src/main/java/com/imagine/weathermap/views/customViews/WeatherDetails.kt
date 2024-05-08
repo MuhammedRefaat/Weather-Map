@@ -9,12 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import com.imagine.weathermap.R
+import com.imagine.weathermap.databinding.SingleCityWeatherBinding
+import com.imagine.weathermap.databinding.WeatherForecastBinding
 import com.imagine.weathermap.misc.Utils
 import com.imagine.weathermap.models.APIsData
-import kotlinx.android.synthetic.main.single_city_weather.view.*
 
 
 class WeatherDetails : LinearLayout {
+
+    private lateinit var binding: WeatherForecastBinding
 
     @JvmOverloads
     constructor(
@@ -49,24 +52,23 @@ class WeatherDetails : LinearLayout {
         isC: Boolean
     ): LinearLayout {
         containerLayout.removeAllViews()
-        val view = LayoutInflater.from(context)
-            .inflate(R.layout.single_city_weather, this, false)
+        val view = SingleCityWeatherBinding.inflate(LayoutInflater.from(context))
         try {
-            view.city_name.visibility = View.GONE
+            view.cityName.visibility = View.GONE
             view.temperature.text = Utils.tempValue(weatherCondition.main!!.temp, isC)
-            view.temp_icon.setImageResource(Utils.getAssetForTemp(weatherCondition.main.temp))
-            view.feels_like.text =
+            view.tempIcon.setImageResource(Utils.getAssetForTemp(weatherCondition.main.temp))
+            view.feelsLike.text =
                 FEELS_LIKE + Utils.tempValue(weatherCondition.main.feelsLike, isC)
-            view.Weather_desc.text = weatherCondition.weather!![0].description!!
+            view.WeatherDesc.text = weatherCondition.weather!![0].description!!
             view.humidity.text = weatherCondition.main.humidity
-            view.wind_speed.text = weatherCondition.wind!!.speed
+            view.windSpeed.text = weatherCondition.wind!!.speed
             view.cloud.text = weatherCondition.weather[0].clouds!!
         } catch (ex: Exception) {
             ex.printStackTrace()
-            view.weather_details.visibility = View.GONE
+            view.weatherDetails.visibility = View.GONE
             view.na.visibility = View.VISIBLE
         }
-        containerLayout.addView(view)
+        containerLayout.addView(view.root)
         return containerLayout
     }
 
@@ -77,31 +79,30 @@ class WeatherDetails : LinearLayout {
         containerLayout: LinearLayout,
         isC: Boolean
     ): LinearLayout {
-        val view = LayoutInflater.from(context)
-            .inflate(R.layout.single_city_weather, this, false)
+        val view = SingleCityWeatherBinding.inflate(LayoutInflater.from(context))
         if (weatherCondition != null) {
             try {
-                view.city_name.text = weatherCondition.name
+                view.cityName.text = weatherCondition.name
                 view.temperature.text = Utils.tempValue(weatherCondition.main!!.temp, isC)
-                view.temp_icon.setImageResource(Utils.getAssetForTemp(weatherCondition.main.temp))
-                view.feels_like.text =
+                view.tempIcon.setImageResource(Utils.getAssetForTemp(weatherCondition.main.temp))
+                view.feelsLike.text =
                     FEELS_LIKE + Utils.tempValue(weatherCondition.main.feelsLike, isC)
-                view.Weather_desc.text = weatherCondition.weather!![0].description!!
-                view.wind_speed.text = weatherCondition.wind!!.speed
+                view.WeatherDesc.text = weatherCondition.weather!![0].description!!
+                view.windSpeed.text = weatherCondition.wind!!.speed
                 view.humidity.text = weatherCondition.main.humidity
                 view.cloud.text = weatherCondition.weather[0].clouds!!
             } catch (ex: Exception) {
                 ex.printStackTrace()
-                view.weather_details.visibility = View.GONE
+                view.weatherDetails.visibility = View.GONE
                 view.na.visibility = View.VISIBLE
             }
         } else {
-            view.city_name.text = cityName
-            view.weather_details.visibility = View.GONE
+            view.cityName.text = cityName
+            view.weatherDetails.visibility = View.GONE
             view.na.visibility = View.VISIBLE
         }
-        view.tag = cityName
-        containerLayout.addView(view)
+        view.root.tag = cityName
+        containerLayout.addView(view.root)
         return containerLayout
     }
 

@@ -1,5 +1,6 @@
 package com.imagine.weathermap.views.activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -8,16 +9,17 @@ import android.os.Bundle
 import android.view.View
 import com.imagine.weathermap.R
 import com.imagine.weathermap.misc.Utils
-import eu.davidea.flipview.FlipView
+import com.wajahatkarim3.easyflipview.EasyFlipView
 
 class MainActivity : AppCompatActivity() {
 
+    @SuppressLint("StaticFieldLeak")
     companion object {
         lateinit var sharedPreferences: SharedPreferences
         const val SHARED_PREF_FILE = "Mango_Weather"
         const val IS_C = "is_c"
         var isC = true
-        lateinit var cOrF: FlipView
+        lateinit var cOrF: EasyFlipView
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,10 +41,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setDegreeTypeButton() {
-        if (isC && cOrF.isFlipped) {
-            cOrF.flip(false)
-        } else if (!isC && !cOrF.isFlipped) {
-            cOrF.flip(true)
+        if (isC && cOrF.isBackSide) {
+            cOrF.flipTheView()
+        } else if (!isC && !cOrF.isBackSide) {
+            cOrF.flipTheView()
         }
     }
 
@@ -60,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
     private val changeCF = View.OnClickListener { view ->
         isC = Utils.setCF()
-        cOrF.flip(!isC)
+        cOrF.flipTheView()
     }
 
 

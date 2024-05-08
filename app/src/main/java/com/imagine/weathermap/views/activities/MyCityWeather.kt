@@ -20,10 +20,12 @@ import com.imagine.weathermap.R
 import com.imagine.weathermap.models.APIsData
 import com.imagine.weathermap.models.MyCityForecastViewModel
 import com.imagine.weathermap.views.customViews.WeatherDetails
-import eu.davidea.flipview.FlipView
-import kotlinx.android.synthetic.main.activity_main.view.*
+import com.wajahatkarim3.easyflipview.EasyFlipView
 import okhttp3.ResponseBody
 import java.lang.Exception
+import com.google.android.gms.location.LocationRequest
+import com.imagine.weathermap.databinding.MyCityWeatherBinding
+import com.wajahatkarim3.easyflipview.EasyFlipView.OnFlipAnimationListener
 
 
 class MyCityWeather : AppCompatActivity() {
@@ -31,33 +33,38 @@ class MyCityWeather : AppCompatActivity() {
     lateinit var weatherViewModel: MyCityForecastViewModel
 
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private lateinit var binding: MyCityWeatherBinding
 
     lateinit var cityName: TextView
     private lateinit var circleProgress: ProgressBar
     lateinit var containerLayout: LinearLayout
     private lateinit var emptyScreen: ImageView
-    private lateinit var cOrF: FlipView
+    private lateinit var cOrF: EasyFlipView
 
-    var latitude: Double = 0.0
-    var longitude: Double = 0.0
+    var latitude: Double? = 0.0
+    var longitude: Double? = 0.0
 
     private lateinit var weatherCondition: APIsData
     var isC = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.my_city_weather)
+        binding = MyCityWeatherBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         // declare views
         cityName = findViewById(R.id.city_name)
         circleProgress = findViewById(R.id.circular_progress)
         containerLayout = findViewById(R.id.cities_weather)
         emptyScreen = findViewById(R.id.empty_screen_decoration)
         cOrF = findViewById(R.id.c_or_f)
+        cOrF.setOnFlipListener { easyFlipView, newCurrentSide ->
+            changeCFMyCity(cOrF)
+        }
         // get the measuring unit
         isC = intent.getBooleanExtra(MainActivity.IS_C, true)
         if (!isC)
-            cOrF.flip(true)
-        cOrF.setOnClickListener(changeCF)
+            cOrF.flipTheView()
         // declaring the view model and it's observer
         weatherViewModel = ViewModelProvider(this).get(MyCityForecastViewModel::class.java)
         observeWeatherViewModel()
@@ -121,6 +128,7 @@ class MyCityWeather : AppCompatActivity() {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == Utils.LOCATION_PERMISSION_ID) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 getCurrentLocation()
@@ -137,12 +145,8 @@ class MyCityWeather : AppCompatActivity() {
 
     @SuppressLint("MissingPermission")
     private fun requestNewLocationData() {
-        val mLocationRequest = LocationRequest()
-        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        mLocationRequest.interval = 0
-        mLocationRequest.fastestInterval = 0
-        mLocationRequest.numUpdates = 1
-
+        val mLocationRequest =
+            LocationRequest.Builder(1000L).setPriority(Priority.PRIORITY_HIGH_ACCURACY).build()
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         mFusedLocationClient.requestLocationUpdates(
             mLocationRequest, mLocationCallback,
@@ -152,8 +156,8 @@ class MyCityWeather : AppCompatActivity() {
 
     private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
-            latitude = locationResult.lastLocation.latitude
-            longitude = locationResult.lastLocation.latitude
+            latitude = locationResult.lastLocation?.latitude
+            longitude = locationResult.lastLocation?.latitude
             // call the Server API
             weatherViewModel.getWeatherForecast(
                 latitude.toString(),
@@ -195,11 +199,14 @@ class MyCityWeather : AppCompatActivity() {
         }
     }
 
-    private fun getCityName(latitude: Double, longitude: Double) {
+    private fun getCityName(latitude: Double?, longitude: Double?) {
         val gcd = Geocoder(this@MyCityWeather, Locale.getDefault())
-        val addresses = gcd.getFromLocation(latitude, longitude, 1)
-        if (addresses.size > 0)
-            cityName.text = addresses[0].locality
+        if (latitude != null && longitude != null) {
+            @Suppress("DEPRECATION")
+            val addresses = gcd.getFromLocation(latitude, longitude, 1)
+            if (addresses != null && addresses.size > 0)
+                cityName.text = addresses[0].locality
+        }
     }
 
     fun goBack(view: View) {
@@ -226,9 +233,9 @@ class MyCityWeather : AppCompatActivity() {
         }
     }
 
-    private val changeCF = View.OnClickListener { view ->
+    fun changeCFMyCity(view: View) {
         isC = Utils.setCF()
-        view.c_or_f.flip(!isC)
+        binding.cOrF.flipTheView()
         try {
             WeatherDetails(this@MyCityWeather).buildMyCityForecastLayout(
                 weatherCondition,
