@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:clipChildren="false"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipChildren="false">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:clipChildren="false"
+        android:orientation="vertical"
         android:padding="10dp">
 
         <RelativeLayout
@@ -22,8 +23,8 @@
                 android:contentDescription="@string/back_button"
                 android:onClick="goBack"
                 android:scaleType="fitStart"
-                app:tint="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_back" />
+                app:srcCompat="@drawable/ic_back"
+                app:tint="@color/colorPrimary" />
 
             <com.wajahatkarim3.easyflipview.EasyFlipView
                 android:id="@+id/c_or_f"
@@ -35,12 +36,12 @@
                 android:background="@color/colorAccent"
                 android:clipToPadding="false"
                 app:flipDuration="500"
-                app:flipType="vertical"
-                app:flipFrom="front">
+                app:flipFrom="front"
+                app:flipType="vertical">
                 <!-- Back Layout Goes Here -->
-                <include layout="@layout/f"/>
+                <include layout="@layout/f" />
                 <!-- Front Layout Goes Here -->
-                <include layout="@layout/c"/>
+                <include layout="@layout/c" />
             </com.wajahatkarim3.easyflipview.EasyFlipView>
 
         </RelativeLayout>
@@ -61,25 +62,24 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:paddingStart="40dp"
-                android:paddingLeft="40dp"
                 android:textColor="@color/colorPrimary"
                 android:textColorHint="@color/gray"
-                android:textSize="14sp" />
+                android:textCursorDrawable="@drawable/cursor"
+                android:textSize="14sp"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/search_icon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/search"
                 android:scaleType="fitCenter"
-                app:tint="@color/gray"
-                app:srcCompat="@drawable/ic_search" />
+                app:srcCompat="@drawable/ic_search"
+                app:tint="@color/gray" />
 
         </RelativeLayout>
 
